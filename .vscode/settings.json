@@ -1,0 +1,6 @@
+{
+    "files.associations": {
+        "simpleshell.h": "c",
+        "stdio.h": "c"
+    }
+}
