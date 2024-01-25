@@ -5,17 +5,17 @@
 
 #define BUFFER_SIZE 1024
 #define INPUT_LIMIT 512
+
 // functions
 
 // update this to get user details? or CWD?
-void display_prompt(){
-
+void display_prompt()
+{
     printf("simple shell:$>");
-    
 }
 
-char * get_users_input(){
-
+char * get_users_input()
+{
     char buffer[BUFFER_SIZE];
     char * user_in;
     
@@ -24,27 +24,29 @@ char * get_users_input(){
     return user_in;
 }
 
-void end(){
-
-    printf("Exiting...\n");
-
+void end(int newline)
+{
+    if(newline)
+        printf("\nExiting...\n");
+    else
+        printf("Exiting...\n");
 }
+
 
 // error handling
 
-void input_too_long_error(){
-
+void input_too_long_error()
+{
     printf("<Input exceeds limit>\n");
-
 }
 
-int token_is_valid(char * token){
-
-    if(token == NULL) 
+int input_is_valid(char * input)
+{
+    if(input == NULL) 
     {
-        return 0;
+        return -1;
     }
-    else if(strlen(token) > INPUT_LIMIT)
+    else if(strlen(input) > INPUT_LIMIT)
     {
         input_too_long_error();
         return 0;
@@ -53,5 +55,4 @@ int token_is_valid(char * token){
     {
         return 1;
     }
-
 }
