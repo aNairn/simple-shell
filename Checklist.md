@@ -18,4 +18,3 @@ Please update this file with anything you think needs done we can discuss stuff 
 - [ ] Prompt the parent process to wiat on the child to complete
 - [ ] Have the child process run the exec() function to run external commands  using the previously entered tokens.
 - [ ] catch errors appropriatly (moday 29th lecture)
-- [ ] 
