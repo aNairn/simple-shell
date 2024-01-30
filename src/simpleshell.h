@@ -5,7 +5,7 @@ void display_prompt();
 
 char * get_users_input();
 
-char * get_tokens(char * user_in);
+char ** get_tokens(char * input);
 
 
 // error handling
@@ -13,3 +13,8 @@ char * get_tokens(char * user_in);
 void input_too_long_error();
 
 int input_is_valid(char * token);
+
+
+// test functions
+
+void test_tokens(char ** tokens);
