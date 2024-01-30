@@ -5,17 +5,18 @@
 
 #define BUFFER_SIZE 1024
 #define INPUT_LIMIT 512
-
+#define TOKEN_DELIM " \t\r\n\a\""
 // functions
 
 // update this to get user details? or CWD?
-void display_prompt()
-{
+void display_prompt(){
+
     printf("simple shell:$>");
+    
 }
 
-char * get_users_input()
-{
+char * get_users_input(){
+
     char buffer[BUFFER_SIZE];
     char * user_in;
     
@@ -24,26 +25,53 @@ char * get_users_input()
     return user_in;
 }
 
-void end(int newline)
-{
-    if(newline)
-        printf("\nExiting...\n");
-    else
-        printf("Exiting...\n");
+char ** get_tokens(char * input){
+    
+    int i = 0;
+    int buff = 16;
+
+    char ** tokens = malloc(buff * sizeof(char *));
+    
+    char * token;
+    
+
+
+    if(!tokens){
+        //TODO: PRINT ERROR
+    }
+    token = strtok(input, TOKEN_DELIM);
+
+    
+    while (token != NULL){
+        tokens[i] = token;
+        i++;
+        if(i>buff) {
+            buff*=2;
+            tokens = realloc(tokens, buff * sizeof(char *));
+            if(!tokens){
+                //TODO: PRINT ERROR
+            }
+        }
+        token = strtok(NULL, TOKEN_DELIM);
+    }
+    tokens[i] = NULL;
+    return tokens;
 }
 
 
 // error handling
 
-void input_too_long_error()
-{
+void input_too_long_error(){
+
     printf("<Input exceeds limit>\n");
+
 }
 
-int input_is_valid(char * input)
-{
+int input_is_valid(char * input){
+
     if(input == NULL) 
     {
+        printf("\n");
         return -1;
     }
     else if(strlen(input) > INPUT_LIMIT)
@@ -55,4 +83,19 @@ int input_is_valid(char * input)
     {
         return 1;
     }
+
+}
+
+
+// test functions
+
+void test_tokens(char ** tokens){
+
+    while (*tokens != NULL){
+        
+        printf("\"%s\"\n", *tokens);
+        tokens++;
+
+    }
+
 }
