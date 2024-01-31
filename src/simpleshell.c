@@ -1,5 +1,5 @@
 #include <stdio.h>
-#include <stdlib.h>
+#include <stdlib.h> 
 #include <string.h>
 #include "simpleshell.h"
 
@@ -86,6 +86,9 @@ int input_is_valid(char * input){
 
 }
 
+void fork_error(){
+    perror("New process error");
+}
 
 // test functions
 
