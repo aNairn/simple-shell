@@ -31,7 +31,7 @@ int main(void){
         }
         
         //-------uncomment to test tokens-------        
-        test_tokens(tokens);
+        // test_tokens(tokens);
         //--------------------------------------
 
         if(!strcmp(*tokens, "exit"))

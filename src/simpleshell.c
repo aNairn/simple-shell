@@ -5,7 +5,7 @@
 
 #define BUFFER_SIZE 1024
 #define INPUT_LIMIT 512
-#define TOKEN_DELIM " \t\r\n\a\""
+#define TOKEN_DELIM " \t\n|><&;"
 // functions
 
 // update this to get user details? or CWD?
