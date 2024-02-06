@@ -1,7 +1,9 @@
 
 // functions
 
-void display_prompt();
+char * get_cwd();
+
+void display_prompt(char * cwd);
 
 char * get_users_input();
 

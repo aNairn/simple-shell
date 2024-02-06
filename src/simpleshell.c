@@ -1,17 +1,30 @@
 #include <stdio.h>
 #include <stdlib.h> 
+#include <unistd.h>
 #include <string.h>
 #include "simpleshell.h"
 
 #define BUFFER_SIZE 1024
 #define INPUT_LIMIT 512
 #define TOKEN_DELIM " \t\n|><&;"
+
+
 // functions
 
 // update this to get user details? or CWD?
-void display_prompt(){
+char * get_cwd(){
+    
+    char cwd[BUFFER_SIZE];
+    char * cwd_p = cwd;
 
-    printf("simple shell:$>");
+    getcwd(cwd, sizeof(cwd));
+    
+    return cwd_p;
+}
+
+void display_prompt(char * cwd){
+
+    printf("%s:$>", cwd);
     
 }
 
@@ -37,7 +50,7 @@ char ** get_tokens(char * input){
 
 
     if(!tokens){
-        //TODO: PRINT ERROR
+        perror("allocation error");
     }
     token = strtok(input, TOKEN_DELIM);
 
@@ -49,7 +62,7 @@ char ** get_tokens(char * input){
             buff*=2;
             tokens = realloc(tokens, buff * sizeof(char *));
             if(!tokens){
-                //TODO: PRINT ERROR
+                perror("allocation error");
             }
         }
         token = strtok(NULL, TOKEN_DELIM);
@@ -57,6 +70,7 @@ char ** get_tokens(char * input){
     tokens[i] = NULL;
     return tokens;
 }
+
 
 
 // error handling

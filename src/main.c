@@ -9,12 +9,16 @@ int main(void){
     
     while(1){
         
-        display_prompt();
+
+        char * cwd = get_cwd();
+
+        display_prompt(cwd);
 
         char * user_in;
         char ** tokens;
 
         user_in = get_users_input();
+
         int valid_input = input_is_valid(user_in);
         if(valid_input == -1) 
         {
@@ -33,26 +37,40 @@ int main(void){
         //-------uncomment to test tokens-------        
         // test_tokens(tokens);
         //--------------------------------------
+       
 
         if(!strcmp(*tokens, "exit"))
         {
             break;
         }
+        else if(!strcmp(*tokens, "HOME")){
+            char * move_to = getenv(*tokens);
+            chdir(move_to);
+        }
         else {
+
             pid_t pid = fork();
-            if(pid < 0){
+            
+            if(pid < 0)
+            {
                 fork_error();
-            } else if (pid == 0){
+            } 
+            else if (pid == 0)
+            {
                 execvp(tokens[0], tokens);
                 perror(tokens[0]);
                 exit(1);
-            } else {
+            } 
+            else 
+            {
                 wait(NULL);
             }
 
         }
 
     }
+
+
     printf("Exiting...\n");
     return 0;
 }

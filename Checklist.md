@@ -23,3 +23,9 @@ Please update this file with anything you think needs done we can discuss stuff 
 - [] Write test file
 - [] Add final perrors
 - [] Possible error file
+
+# Stage Three
+- [ ] use getenv() to get users HOME dir
+- [ ] change the current dirrectory of the program using chdir()
+- [ ] use getcwd() finction to check this is working
+- [ ] 
