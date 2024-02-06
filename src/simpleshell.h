@@ -14,6 +14,8 @@ void input_too_long_error();
 
 int input_is_valid(char * token);
 
+void fork_error();
+
 
 // test functions
 

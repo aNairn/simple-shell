@@ -1,11 +1,11 @@
 #include <stdio.h>
-#include <stdlib.h>
+#include <stdlib.h> 
 #include <string.h>
 #include "simpleshell.h"
 
 #define BUFFER_SIZE 1024
 #define INPUT_LIMIT 512
-#define TOKEN_DELIM " \t\r\n\a\""
+#define TOKEN_DELIM " \t\n|><&;"
 // functions
 
 // update this to get user details? or CWD?
@@ -86,6 +86,9 @@ int input_is_valid(char * input){
 
 }
 
+void fork_error(){
+    perror("New process error");
+}
 
 // test functions
 

@@ -1,5 +1,8 @@
 #include <stdio.h>
 #include <string.h>
+#include <unistd.h>
+#include <stdlib.h>
+#include <sys/wait.h>
 #include "simpleshell.h"
 
 int main(void){
@@ -28,12 +31,25 @@ int main(void){
         }
         
         //-------uncomment to test tokens-------        
-        test_tokens(tokens);
+        // test_tokens(tokens);
         //--------------------------------------
 
         if(!strcmp(*tokens, "exit"))
         {
             break;
+        }
+        else {
+            pid_t pid = fork();
+            if(pid < 0){
+                fork_error();
+            } else if (pid == 0){
+                execvp(tokens[0], tokens);
+                perror(tokens[0]);
+                exit(1);
+            } else {
+                wait(NULL);
+            }
+
         }
 
     }
