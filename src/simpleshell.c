@@ -2,6 +2,8 @@
 #include <stdlib.h> 
 #include <unistd.h>
 #include <string.h>
+#include <sys/types.h>
+
 #include "simpleshell.h"
 
 #define BUFFER_SIZE 1024
@@ -110,6 +112,41 @@ void change_path(char ** tokens){
         setenv("PATH", *tokens, 1);
         printf("NEW PATH SET : %s\n", *tokens);
     }
+}
+
+void print_home(){
+    printf("%s\n", getenv("HOME"));
+}
+
+void print_path(){
+    printf("%s\n", getenv("PATH"));
+}
+
+void run_fork(char ** tokens){
+    pid_t pid = fork();
+            
+    if(pid < 0)
+    {
+        fork_error();
+    } 
+    else if (pid == 0)
+    {
+        execvp(tokens[0], tokens);
+        perror(tokens[0]);
+        exit(1);
+    } 
+    else 
+    {
+        wait(NULL);
+    }
+}
+
+void reset_env(char * starting_dir, char * starting_HOME, char * starting_PATH){
+    chdir(starting_dir);
+    setenv("HOME", starting_HOME, 1);
+    setenv("PATH", starting_PATH, 1);
+    printf("RESETING ENVIRO : \n\tHOME-%s \n\tPATH-%s\n", getenv("HOME"), getenv("PATH"));
+    printf("Exiting...\n");
 }
 
 // error handling

@@ -10,7 +10,6 @@ int main(void){
     char * starting_dir = get_cwd();
     char * starting_PATH = getenv("PATH");
     char * starting_HOME = getenv("HOME");
-    printf("\n\n%d\n\n",chdir(starting_HOME));
     
     while(1){
     
@@ -33,6 +32,7 @@ int main(void){
         }        
         
         tokens = get_tokens(user_in);
+
         if(*tokens == NULL){
             continue;
         }
@@ -56,7 +56,7 @@ int main(void){
         }
         else if(!strcmp(*tokens, "print-home"))
         {
-            printf("%s\n", getenv("HOME"));
+            print_home();
         }
         else if(!strcmp(*tokens, "set-path"))
         {
@@ -64,34 +64,16 @@ int main(void){
         }
         else if(!strcmp(*tokens, "print-path"))
         {
-            printf("%s\n", getenv("PATH"));
+            print_home();
         }
         else 
         {
-            pid_t pid = fork();
-            
-            if(pid < 0)
-            {
-                fork_error();
-            } 
-            else if (pid == 0)
-            {
-                execvp(tokens[0], tokens);
-                perror(tokens[0]);
-                exit(1);
-            } 
-            else 
-            {
-                wait(NULL);
-            }
+            run_fork(tokens);
         }
 
     }
 
-    chdir(starting_dir);
-    setenv("HOME", starting_HOME, 1);
-    setenv("PATH", starting_PATH, 1);
-    printf("RESETING ENVIRO : \n\tHOME-%s \n\tPATH-%s\n", getenv("HOME"), getenv("PATH"));
-    printf("Exiting...\n");
+    reset_env(starting_dir, starting_HOME, starting_PATH);
+
     return 0;
 }

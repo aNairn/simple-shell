@@ -15,6 +15,12 @@ void change_home(char ** tokens);
 
 void change_path(char ** tokens);
 
+void print_home();
+
+void print_path();
+
+void run_fork(char ** tokens);
+
 // error handling
 
 void input_too_long_error();
