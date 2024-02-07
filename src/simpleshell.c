@@ -71,7 +71,46 @@ char ** get_tokens(char * input){
     return tokens;
 }
 
+void change_dir(char ** tokens){
+    
+    if(*(tokens+1) != NULL)
+    {
+        to_many_args_err();
+    }
+    else
+    {
+        if(!strcmp(*tokens, "~") || !strcmp(*tokens, "HOME"))
+        {
+            chdir(getenv("HOME"));
+        }
+        else
+        {
+            chdir(*tokens);
+        }
+    }
+}
 
+void change_home(char ** tokens){
+    if(*(tokens+1) != NULL){
+        to_many_args_err();
+    }
+    else
+    {
+        setenv("HOME", *tokens, 1);
+        printf("NEW HOME SET : %s\n", *tokens);
+    }
+}
+
+void change_path(char ** tokens){
+    if(*(tokens+1) != NULL){
+        to_many_args_err();
+    }
+    else
+    {
+        setenv("PATH", *tokens, 1);
+        printf("NEW PATH SET : %s\n", *tokens);
+    }
+}
 
 // error handling
 
@@ -104,6 +143,9 @@ void fork_error(){
     perror("New process error");
 }
 
+void to_many_args_err(){
+    perror("To Many Arguments");
+}
 // test functions
 
 void test_tokens(char ** tokens){

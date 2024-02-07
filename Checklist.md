@@ -25,7 +25,10 @@ Please update this file with anything you think needs done we can discuss stuff 
 - [] Possible error file
 
 # Stage Three
-- [ ] use getenv() to get users HOME dir
-- [ ] change the current dirrectory of the program using chdir()
-- [ ] use getcwd() finction to check this is working
-- [ ] 
+- [x] get the home and current directory and save them for use on shutdown
+- [x] save the PATH at the start of the program
+- [x] use getenv() to get users HOME dir
+- [x] change the current dirrectory of the program using chdir()
+- [x] use getcwd() finction to check this is working
+- [ ] implement getpath() setpath() functions
+- [ ] handle inproper param entered to getpath() and setpath()
