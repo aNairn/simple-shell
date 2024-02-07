@@ -1,26 +1,27 @@
 #include <stdio.h>
 #include <string.h>
-#include <unistd.h>
 #include <stdlib.h>
-#include <sys/wait.h>
+#include <unistd.h>
+
 #include "simpleshell.h"
 
 int main(void){
-    
     char * starting_dir = get_cwd();
     char * starting_PATH = getenv("PATH");
     char * starting_HOME = getenv("HOME");
     
-    while(1){
-    
-        char * cwd = get_cwd();
-        display_prompt(cwd);
+    chdir(getenv("HOME"));
 
+    while(1)
+    {
+        char * cwd = get_cwd();
         char * user_in;
         char ** tokens;
 
-        user_in = get_users_input();
+        display_prompt(cwd);
 
+        user_in = get_users_input();
+        
         int valid_input = input_is_valid(user_in);
         if(valid_input == -1) 
         {
@@ -64,13 +65,12 @@ int main(void){
         }
         else if(!strcmp(*tokens, "print-path"))
         {
-            print_home();
+            print_path();
         }
         else 
         {
             run_fork(tokens);
         }
-
     }
 
     reset_env(starting_dir, starting_HOME, starting_PATH);

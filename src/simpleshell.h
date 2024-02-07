@@ -21,6 +21,8 @@ void print_path();
 
 void run_fork(char ** tokens);
 
+void reset_env(char * starting_dir, char * starting_HOME, char * starting_PATH);
+
 // error handling
 
 void input_too_long_error();

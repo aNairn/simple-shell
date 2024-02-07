@@ -1,8 +1,8 @@
 #include <stdio.h>
-#include <stdlib.h> 
-#include <unistd.h>
 #include <string.h>
-#include <sys/types.h>
+#include <unistd.h>
+#include <stdlib.h>
+#include <sys/wait.h>
 
 #include "simpleshell.h"
 
@@ -13,9 +13,7 @@
 
 // functions
 
-// update this to get user details? or CWD?
-char * get_cwd(){
-    
+char * get_cwd(){  
     char cwd[BUFFER_SIZE];
     char * cwd_p = cwd;
 
@@ -25,13 +23,10 @@ char * get_cwd(){
 }
 
 void display_prompt(char * cwd){
-
     printf("%s:$>", cwd);
-    
 }
 
 char * get_users_input(){
-
     char buffer[BUFFER_SIZE];
     char * user_in;
     
@@ -41,23 +36,20 @@ char * get_users_input(){
 }
 
 char ** get_tokens(char * input){
-    
     int i = 0;
     int buff = 16;
-
     char ** tokens = malloc(buff * sizeof(char *));
-    
     char * token;
     
-
-
-    if(!tokens){
+    if(!tokens)
+    {
         perror("allocation error");
     }
+    
     token = strtok(input, TOKEN_DELIM);
 
-    
-    while (token != NULL){
+    while (token != NULL)
+    {
         tokens[i] = token;
         i++;
         if(i>buff) {
@@ -73,8 +65,7 @@ char ** get_tokens(char * input){
     return tokens;
 }
 
-void change_dir(char ** tokens){
-    
+void change_dir(char ** tokens){  
     if(*(tokens+1) != NULL)
     {
         to_many_args_err();
@@ -93,7 +84,8 @@ void change_dir(char ** tokens){
 }
 
 void change_home(char ** tokens){
-    if(*(tokens+1) != NULL){
+    if(*(tokens+1) != NULL)
+    {
         to_many_args_err();
     }
     else
@@ -104,7 +96,8 @@ void change_home(char ** tokens){
 }
 
 void change_path(char ** tokens){
-    if(*(tokens+1) != NULL){
+    if(*(tokens+1) != NULL)
+    {
         to_many_args_err();
     }
     else
@@ -152,13 +145,10 @@ void reset_env(char * starting_dir, char * starting_HOME, char * starting_PATH){
 // error handling
 
 void input_too_long_error(){
-
     printf("<Input exceeds limit>\n");
-
 }
 
 int input_is_valid(char * input){
-
     if(input == NULL) 
     {
         printf("\n");
@@ -173,25 +163,22 @@ int input_is_valid(char * input){
     {
         return 1;
     }
-
 }
 
 void fork_error(){
-    perror("New process error");
+    perror("<New process error>");
 }
 
 void to_many_args_err(){
-    perror("To Many Arguments");
+    perror("<To Many Arguments>");
 }
+
 // test functions
 
 void test_tokens(char ** tokens){
-
-    while (*tokens != NULL){
-        
+    while (*tokens != NULL)
+    {    
         printf("\"%s\"\n", *tokens);
         tokens++;
-
     }
-
 }

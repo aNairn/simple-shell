@@ -33,3 +33,9 @@ Please update this file with anything you think needs done we can discuss stuff 
 - [x] use getcwd() finction to check this is working
 - [ ] implement getpath() setpath() functions
 - [ ] handle inproper param entered to getpath() and setpath() note: these functions return int values dependent on success
+
+# Stage Four
+- [x] check for cd command
+- [x] check for to many args
+- [x] change to an existing directory
+- [ ] show error for if a dir does not exist
