@@ -10,6 +10,7 @@ int main(void){
     char * starting_dir = get_cwd();
     char * starting_PATH = getenv("PATH");
     char * starting_HOME = getenv("HOME");
+    printf("\n\n%d\n\n",chdir(starting_HOME));
     
     while(1){
     

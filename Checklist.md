@@ -27,8 +27,9 @@ Please update this file with anything you think needs done we can discuss stuff 
 # Stage Three
 - [x] get the home and current directory and save them for use on shutdown
 - [x] save the PATH at the start of the program
+- [x] have the program start in the users home dir
 - [x] use getenv() to get users HOME dir
 - [x] change the current dirrectory of the program using chdir()
 - [x] use getcwd() finction to check this is working
 - [ ] implement getpath() setpath() functions
-- [ ] handle inproper param entered to getpath() and setpath()
+- [ ] handle inproper param entered to getpath() and setpath() note: these functions return int values dependent on success
