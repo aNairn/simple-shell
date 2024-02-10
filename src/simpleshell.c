@@ -3,6 +3,7 @@
 #include <unistd.h>
 #include <stdlib.h>
 #include <sys/wait.h>
+#include <sys/stat.h>
 
 #include "simpleshell.h"
 
@@ -72,14 +73,17 @@ void change_dir(char ** tokens){
     }
     else
     {
-        if(!strcmp(*tokens, "~") || !strcmp(*tokens, "HOME"))
-        {
-            chdir(getenv("HOME"));
-        }
-        else
-        {
-            chdir(*tokens);
-        }
+        if (!strcmp(*tokens, "~") || !strcmp(*tokens, "HOME"))
+            {
+                chdir(getenv("HOME"));
+            }
+            else
+            {
+                if (chdir(*tokens) != 0)
+                {
+                    not_valid_dir(tokens);
+                }
+            }
     }
 }
 
@@ -90,8 +94,17 @@ void change_home(char ** tokens){
     }
     else
     {
-        setenv("HOME", *tokens, 1);
-        printf("NEW HOME SET : %s\n", *tokens);
+        struct stat dir_stat;
+        if(stat(*tokens,&dir_stat) != 0 || !S_ISDIR(dir_stat.st_mode)){
+            perror("Directory does not exist");
+        }
+        else if(setenv("HOME", *tokens, 1) != 0){
+            perror("change_home error");
+            }
+            else
+            {
+            printf("NEW HOME SET : %s\n", *tokens);
+            }
     }
 }
 
@@ -102,8 +115,17 @@ void change_path(char ** tokens){
     }
     else
     {
-        setenv("PATH", *tokens, 1);
-        printf("NEW PATH SET : %s\n", *tokens);
+        struct stat dir_stat;
+        if(stat(*tokens,&dir_stat) != 0 || !S_ISDIR(dir_stat.st_mode)){
+            perror("Directory does not exist");
+        }
+        else if(setenv("PATH", *tokens, 1) != 0){
+            perror("change_path error");
+            }
+            else
+            {
+            printf("NEW PATH SET : %s\n", *tokens);
+            }
     }
 }
 
@@ -171,6 +193,10 @@ void fork_error(){
 
 void to_many_args_err(){
     perror("<To Many Arguments>");
+}
+
+void not_valid_dir(char **tokens){
+    printf("<Directory '%s' does not exists>\n", *tokens);
 }
 
 // test functions

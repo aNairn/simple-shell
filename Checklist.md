@@ -21,7 +21,7 @@ Please update this file with anything you think needs done we can discuss stuff 
 
 # Stage Two Strech
 - [] Write test file
-- [] Add final perrors
+- [x] Add final perrors
 - [] Possible error file
 
 # Stage Three
@@ -31,11 +31,11 @@ Please update this file with anything you think needs done we can discuss stuff 
 - [x] use getenv() to get users HOME dir
 - [x] change the current dirrectory of the program using chdir()
 - [x] use getcwd() finction to check this is working
-- [ ] implement getpath() setpath() functions
-- [ ] handle inproper param entered to getpath() and setpath() note: these functions return int values dependent on success
+- [x] implement getpath() setpath() functions
+- [x] handle inproper param entered to getpath() and setpath() note: these functions return int values dependent on success
 
 # Stage Four
 - [x] check for cd command
 - [x] check for to many args
 - [x] change to an existing directory
-- [ ] show error for if a dir does not exist
+- [x] show error for if a dir does not exist
