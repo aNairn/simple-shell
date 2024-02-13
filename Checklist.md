@@ -43,7 +43,11 @@ Please update this file with anything you think needs done we can discuss stuff 
 - [x] change to an existing directory
 - [x] show error for if a dir does not exist
 
-# Stage Five
+# Stage Four - FIX
+- [x] cd into a file should show an error saying its a file
+- [x] getpath setpath gethome sethome
+- [x] cd no arguments 
+- [x] not enough arguments for change path and change home# Stage Five
 - [ ] Create a list of Strings to hold the commands entered during runtime
 - [ ] Each time a command is ran add it to the History array
 - [ ] Check for '!' being the first character
