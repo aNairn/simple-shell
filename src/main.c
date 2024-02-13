@@ -51,25 +51,25 @@ int main(void){
         {
             change_dir(tokens+1);
         }
-        else if(!strcmp(*tokens, "set-home"))
+        else if(!strcmp(*tokens, "sethome"))
         {
             change_home(tokens+1);
         }
-        else if(!strcmp(*tokens, "print-home"))
+        else if(!strcmp(*tokens, "gethome"))
         {
             print_home();
         }
-        else if(!strcmp(*tokens, "set-path"))
+        else if(!strcmp(*tokens, "setpath"))
         {
             change_path(tokens+1);
         }
-        else if(!strcmp(*tokens, "print-path"))
+        else if(!strcmp(*tokens, "getpath"))
         {
             print_path();
         }
-        else if(!strcmp(*tokens, "restore-path"))
+        else if(!strcmp(*tokens, "restorepath"))
         {
-            change_path(starting_PATH);
+            change_path(&starting_PATH);
         }
         else 
         {

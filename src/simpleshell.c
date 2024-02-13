@@ -67,28 +67,42 @@ char ** get_tokens(char * input){
 }
 
 void change_dir(char ** tokens){  
-    if(*(tokens+1) != NULL)
+    if(*tokens == NULL){
+        chdir(getenv("HOME"));
+    }
+    else if(*(tokens+1) != NULL)
     {
         to_many_args_err();
     }
     else
     {
         if (!strcmp(*tokens, "~") || !strcmp(*tokens, "HOME"))
+        {
+            chdir(getenv("HOME"));
+        }
+        else if (chdir(*tokens) != 0)
+        {
+            struct stat buf;
+            stat(*tokens,  &buf);
+            FILE * f = fopen(*tokens, "r");
+            if(f != NULL)
             {
-                chdir(getenv("HOME"));
-            }
-            else
+                fclose(f);
+                cd_into_file_error(tokens);
+            }else 
             {
-                if (chdir(*tokens) != 0)
-                {
-                    not_valid_dir(tokens);
-                }
+                not_valid_dir(tokens);
             }
+        }
     }
 }
 
 void change_home(char ** tokens){
-    if(*(tokens+1) != NULL)
+    if(*tokens == NULL)
+    {
+        to_few_args_err();
+    }
+    else if(*(tokens+1) != NULL)
     {
         to_many_args_err();
     }
@@ -100,16 +114,20 @@ void change_home(char ** tokens){
         }
         else if(setenv("HOME", *tokens, 1) != 0){
             perror("change_home error");
-            }
-            else
-            {
-            printf("NEW HOME SET : %s\n", *tokens);
-            }
+        }
+        else
+        {
+        printf("NEW HOME SET : %s\n", *tokens);
+        }
     }
 }
 
 void change_path(char ** tokens){
-    if(*(tokens+1) != NULL)
+    if(*tokens == NULL)
+    {
+        to_few_args_err();
+    }
+    else if(*(tokens+1) != NULL)
     {
         to_many_args_err();
     }
@@ -166,8 +184,12 @@ void reset_env(char * starting_dir, char * starting_HOME, char * starting_PATH){
 
 // error handling
 
+void to_few_args_err(){
+    perror("<Input does not have enough arguments>");
+}
+
 void input_too_long_error(){
-    printf("<Input exceeds limit>\n");
+    perror("<Input exceeds limit>");
 }
 
 int input_is_valid(char * input){
@@ -199,6 +221,9 @@ void not_valid_dir(char **tokens){
     printf("<Directory '%s' does not exists>\n", *tokens);
 }
 
+void cd_into_file_error(char ** tokens){
+    perror("<Can't cd into file>");
+}
 // test functions
 
 void test_tokens(char ** tokens){
