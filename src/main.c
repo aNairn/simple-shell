@@ -67,6 +67,10 @@ int main(void){
         {
             print_path();
         }
+        else if(!strcmp(*tokens, "restore-path"))
+        {
+            change_path(starting_PATH);
+        }
         else 
         {
             run_fork(tokens);

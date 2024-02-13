@@ -33,6 +33,8 @@ void fork_error();
 
 void to_many_args_err();
 
+void not_valid_dir(char ** tokens);
+
 // test functions
 
 void test_tokens(char ** tokens);
