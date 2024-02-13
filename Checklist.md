@@ -48,6 +48,9 @@ Please update this file with anything you think needs done we can discuss stuff 
 - [x] getpath setpath gethome sethome
 - [x] cd no arguments 
 - [x] not enough arguments for change path and change home# Stage Five
+
+
+# Stage Five
 - [ ] Create a list of Strings to hold the commands entered during runtime
 - [ ] Each time a command is ran add it to the History array
 - [ ] Check for '!' being the first character
