@@ -1,20 +1,27 @@
 #include <stdio.h>
 #include <string.h>
-#include <unistd.h>
 #include <stdlib.h>
-#include <sys/wait.h>
+#include <unistd.h>
+
 #include "simpleshell.h"
 
 int main(void){
+    char * starting_dir = get_cwd();
+    char * starting_PATH = getenv("PATH");
+    char * starting_HOME = getenv("HOME");
     
-    while(1){
-        
-        display_prompt();
+    chdir(getenv("HOME"));
 
+    while(1)
+    {
+        char * cwd = get_cwd();
         char * user_in;
         char ** tokens;
 
+        display_prompt(cwd);
+
         user_in = get_users_input();
+        
         int valid_input = input_is_valid(user_in);
         if(valid_input == -1) 
         {
@@ -26,6 +33,7 @@ int main(void){
         }        
         
         tokens = get_tokens(user_in);
+
         if(*tokens == NULL){
             continue;
         }
@@ -33,26 +41,43 @@ int main(void){
         //-------uncomment to test tokens-------        
         // test_tokens(tokens);
         //--------------------------------------
+       
 
         if(!strcmp(*tokens, "exit"))
         {
             break;
         }
-        else {
-            pid_t pid = fork();
-            if(pid < 0){
-                fork_error();
-            } else if (pid == 0){
-                execvp(tokens[0], tokens);
-                perror(tokens[0]);
-                exit(1);
-            } else {
-                wait(NULL);
-            }
-
+        else if(!strcmp(*tokens, "cd"))
+        {
+            change_dir(tokens+1);
         }
-
+        else if(!strcmp(*tokens, "set-home"))
+        {
+            change_home(tokens+1);
+        }
+        else if(!strcmp(*tokens, "print-home"))
+        {
+            print_home();
+        }
+        else if(!strcmp(*tokens, "set-path"))
+        {
+            change_path(tokens+1);
+        }
+        else if(!strcmp(*tokens, "print-path"))
+        {
+            print_path();
+        }
+        else if(!strcmp(*tokens, "restore-path"))
+        {
+            change_path(starting_PATH);
+        }
+        else 
+        {
+            run_fork(tokens);
+        }
     }
-    printf("Exiting...\n");
+
+    reset_env(starting_dir, starting_HOME, starting_PATH);
+
     return 0;
 }
