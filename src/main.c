@@ -22,6 +22,8 @@ int main(void){
 
         user_in = get_users_input();
         
+        //TODO: HISTORY CHECK HERE
+
         int valid_input = input_is_valid(user_in);
         if(valid_input == -1) 
         {
@@ -31,6 +33,8 @@ int main(void){
         {
             continue;
         }        
+
+
         
         tokens = get_tokens(user_in);
 

@@ -43,4 +43,22 @@ Please update this file with anything you think needs done we can discuss stuff 
 - [x] change to an existing directory
 - [x] show error for if a dir does not exist
 
+# Stage Five
+- [ ] Create a list of Strings to hold the commands entered during runtime
+- [ ] Each time a command is ran add it to the History array
+- [ ] Check for '!' being the first character
+- [ ] Invoke command from history
+        - !! ==> print last command
+        - !1 ==> print first command
+        - !-1 ==> print first command 
+- [ ] If the number is greater or lower than the length of the History array throw error
+- [ ] Treat 0 of the array as 1 and run the command at the index entered 
+        - '!-1' ==> run the 0th command
+        - '!-4' ==> run the 3rd command
+- [ ] Pick a method of handling a full array
+        - circular array?
+        - shift all elements to the left 1-2-3 becomes 0-1-2?
+        - reallocate array to increase size?
+- [ ] Print History if the form of \<No> \<command>
+- [ ] If command found in history it should be ran like any other command but there should be no history check 
 
