@@ -224,6 +224,11 @@ void not_valid_dir(char **tokens){
 void cd_into_file_error(char ** tokens){
     perror("<Can't cd into file>");
 }
+
+void empty_history_error(){
+    perror("<History Empty>");
+}
+
 // test functions
 
 void test_tokens(char ** tokens){

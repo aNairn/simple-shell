@@ -10,21 +10,24 @@ int main(void){
     char * starting_PATH = getenv("PATH");
     char * starting_HOME = getenv("HOME");
     
+    char ** history = malloc(20*sizeof(char *));
+
+    int history_len = 0;
+    
     chdir(getenv("HOME"));
 
     while(1)
     {
-        char * cwd = get_cwd();
-        char * user_in;
         char ** tokens;
-
+        char * user_in;
+        char * cwd = get_cwd();
+        
         display_prompt(cwd);
 
         user_in = get_users_input();
-        
-        //TODO: HISTORY CHECK HERE
 
         int valid_input = input_is_valid(user_in);
+        
         if(valid_input == -1) 
         {
             break;
@@ -32,23 +35,70 @@ int main(void){
         else if(valid_input == 0) 
         {
             continue;
-        }        
-
-
-        
-        tokens = get_tokens(user_in);
-
-        if(*tokens == NULL){
-            continue;
         }
         
-        //-------uncomment to test tokens-------        
-        // test_tokens(tokens);
-        //--------------------------------------
-       
+        tokens = get_tokens(strdup(user_in));
+            
+        // CHECKING HISTORY
+        if(*tokens[0] == '!' && !*(tokens+1))
+        {
+            char * command = *tokens+1;
+            
+            if(*command == '!')
+            {
+                command++;
+                
+                if(*command != '\0')
+                {
+                    to_many_args_err();
+                    free(tokens);
+                    continue;
+                }
+                else if(history_len>0)
+                {
+                    tokens = get_tokens(strdup(history[history_len-1]));
+                }
+                else
+                {
+                    empty_history_error();
+                    free(tokens);
+                    continue;
+                }
+            }
+            else if(*command == '-')
+            {
+                command++;
+            }
+
+            // Here we should work on how to parse the string into an integer
+            // Also solve how we jump this section coming from new tokens
+
+
+        }
+        else if(**tokens == '!' && *(tokens+1))
+        {
+            to_many_args_err();
+            free(tokens);
+            continue;
+        }
+        else
+        {
+            // Add the current command to history
+            history[history_len] = strdup(user_in);
+            history_len++;
+        }
+
+        // Make sure tokens are valid
+        if(*tokens == NULL)
+        {
+            continue;
+        }
+
+        
 
         if(!strcmp(*tokens, "exit"))
         {
+            free(tokens);
             break;
         }
         else if(!strcmp(*tokens, "cd"))
@@ -75,13 +125,23 @@ int main(void){
         {
             change_path(&starting_PATH);
         }
+        else if(!strcmp(*tokens, "history"))
+        {
+            for(int i = 0; i < history_len; i++){
+                printf("%d : %s", i, history[i]);
+            }
+        }
         else 
         {
             run_fork(tokens);
         }
+    
+        free(tokens);
     }
-
+    
     reset_env(starting_dir, starting_HOME, starting_PATH);
 
+    free(history);
+    
     return 0;
 }

@@ -39,6 +39,8 @@ void not_valid_dir(char ** tokens);
 
 void cd_into_file_error(char ** tokens);
 
+void empty_history_error();
+
 // test functions
 
 void test_tokens(char ** tokens);
