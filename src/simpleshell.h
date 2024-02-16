@@ -25,23 +25,7 @@ void reset_env(char * starting_dir, char * starting_HOME, char * starting_PATH);
 
 int parseCommand(char * command);
 
-// error handling
-
-void to_few_args_err();
-
-void input_too_long_error();
-
-int input_is_valid(char * token);
-
-void fork_error();
-
-void to_many_args_err();
-
-void not_valid_dir(char ** tokens);
-
-void cd_into_file_error(char ** tokens);
-
-void empty_history_error();
+void print_history(char ** history, int history_len);
 
 // test functions
 

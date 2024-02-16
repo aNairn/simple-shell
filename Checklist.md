@@ -21,9 +21,9 @@ Please update this file with anything you think needs done we can discuss stuff 
 
 
 # Stage Two Strech
-- [] Write test file
+- [ ] Write test file
 - [x] Add final perrors
-- [] Possible error file
+- [x] Possible error file
 
 
 # Stage Three
@@ -56,16 +56,16 @@ Please update this file with anything you think needs done we can discuss stuff 
 - [x] Check for '!' being the first character
 - [ ] Invoke command from history
         - [x] !! ==> print last command
-        - [ ] !1 ==> print first command
-        - [ ] !-1 ==> print first command 
-- [ ] If the number is greater or lower than the length of the History array throw error
-- [ ] Treat 0 of the array as 1 and run the command at the index entered 
-        - '!-1' ==> run the 0th command
-        - '!-4' ==> run the 3rd command
+        - [x] !1 ==> print first command
+        - [x] !-1 ==> print first command 
+- [x] If the number is greater or lower than the length of the History array throw error
+- [x] Treat 0 of the array as 1 and run the command at the index entered 
+        - [x] '!-1' ==> run the 0th command
+        - [x] '!-4' ==> run the 3rd command
 - [ ] Pick a method of handling a full array
         - circular array?
         - shift all elements to the left 1-2-3 becomes 0-1-2?
         - reallocate array to increase size?
 - [x] Print History if the form of \<No> \<command>
-- [ ] If command found in history it should be ran like any other command but there should be no history check 
+- [x] If command found in history it should be ran like any other command but there should be no history check 
 

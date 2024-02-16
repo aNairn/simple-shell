@@ -6,6 +6,7 @@
 #include <sys/stat.h>
 
 #include "simpleshell.h"
+#include "error.h"
 
 #define BUFFER_SIZE 1024
 #define INPUT_LIMIT 512
@@ -14,7 +15,8 @@
 
 // functions
 
-char * get_cwd(){  
+char * get_cwd()
+{  
     char cwd[BUFFER_SIZE];
     char * cwd_p = cwd;
 
@@ -23,11 +25,13 @@ char * get_cwd(){
     return cwd_p;
 }
 
-void display_prompt(char * cwd){
+void display_prompt(char * cwd)
+{
     printf("%s:$>", cwd);
 }
 
-char * get_users_input(){
+char * get_users_input()
+{
     char buffer[BUFFER_SIZE];
     char * user_in;
     
@@ -36,7 +40,8 @@ char * get_users_input(){
     return user_in;
 }
 
-char ** get_tokens(char * input){
+char ** get_tokens(char * input)
+{
     int i = 0;
     int buff = 16;
     char ** tokens = malloc(buff * sizeof(char *));
@@ -97,7 +102,8 @@ void change_dir(char ** tokens){
     }
 }
 
-void change_home(char ** tokens){
+void change_home(char ** tokens)
+{
     if(*tokens == NULL)
     {
         to_few_args_err();
@@ -122,7 +128,8 @@ void change_home(char ** tokens){
     }
 }
 
-void change_path(char ** tokens){
+void change_path(char ** tokens)
+{
     if(*tokens == NULL)
     {
         to_few_args_err();
@@ -147,15 +154,18 @@ void change_path(char ** tokens){
     }
 }
 
-void print_home(){
+void print_home()
+{
     printf("%s\n", getenv("HOME"));
 }
 
-void print_path(){
+void print_path()
+{
     printf("%s\n", getenv("PATH"));
 }
 
-void run_fork(char ** tokens){
+void run_fork(char ** tokens)
+{
     pid_t pid = fork();
             
     if(pid < 0)
@@ -174,7 +184,8 @@ void run_fork(char ** tokens){
     }
 }
 
-void reset_env(char * starting_dir, char * starting_HOME, char * starting_PATH){
+void reset_env(char * starting_dir, char * starting_HOME, char * starting_PATH)
+{
     chdir(starting_dir);
     setenv("HOME", starting_HOME, 1);
     setenv("PATH", starting_PATH, 1);
@@ -182,75 +193,56 @@ void reset_env(char * starting_dir, char * starting_HOME, char * starting_PATH){
     printf("Exiting...\n");
 }
 
-int parseCommand(char * command){
+int parseCommand(char * command)
+{    
     if(*(command+2))
+    {
         return -1;
+    }
     if(!*command)
+    {
         return -1;
+    }        
     if((*command < '0' || *command > '9'))
+    {
         return -1;
-
-
-    if(*(command+1)){
+    }
+    if(*(command+1))
+    {
         if( *command < '0' || *command > '9' )
+        {
             return -1;
+        }            
         if( *(command+1) < '0' || *(command+1)>'9' )
+        {
             return -1;
+        }
     }
-    
-    return 0;
-}
 
-// error handling
-
-void to_few_args_err(){
-    perror("<Input does not have enough arguments>");
-}
-
-void input_too_long_error(){
-    perror("<Input exceeds limit>");
-}
-
-int input_is_valid(char * input){
-    if(input == NULL) 
+    int history_value = 0;
+    if(!*(command+1))
     {
-        printf("\n");
-        return -1;
+        history_value = (*command)-48;
     }
-    else if(strlen(input) > INPUT_LIMIT)
+    else
     {
-        input_too_long_error();
-        return 0;
+        history_value = ((*command)-48)*10;
+        history_value += ((*command)-48);
     }
-    else 
-    {
-        return 1;
+    return history_value;
+}
+
+void print_history(char ** history, int history_len)
+{
+    for(int i = history_len-1; i >= 0; i--){
+        printf("%d : %s", i+1, history[i]);
     }
-}
-
-void fork_error(){
-    perror("<New process error>");
-}
-
-void to_many_args_err(){
-    perror("<To Many Arguments>");
-}
-
-void not_valid_dir(char **tokens){
-    printf("<Directory '%s' does not exists>\n", *tokens);
-}
-
-void cd_into_file_error(char ** tokens){
-    perror("<Can't cd into file>");
-}
-
-void empty_history_error(){
-    perror("<History Empty>");
 }
 
 // test functions
 
-void test_tokens(char ** tokens){
+void test_tokens(char ** tokens)
+{
     while (*tokens != NULL)
     {    
         printf("\"%s\"\n", *tokens);

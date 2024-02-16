@@ -4,6 +4,7 @@
 #include <unistd.h>
 
 #include "simpleshell.h"
+#include "error.h"
 
 int main(void){
     char * starting_dir = get_cwd();
@@ -45,6 +46,13 @@ int main(void){
         }
         else if(*tokens[0] == '!' && !*(tokens+1))
         {
+            if(history_len < 1)
+            {
+                empty_history_error();
+                free(tokens);
+                continue;
+            }
+
             char * command = *tokens+1;
             
             if(*command == '!')
@@ -57,27 +65,36 @@ int main(void){
                     free(tokens);
                     continue;
                 }
-                else if(history_len>0)
+                else
                 {
                     tokens = get_tokens(strdup(history[history_len-1]));
                 }
-                else
+            }
+            else
+            {
+                if(*command == '-')
                 {
-                    empty_history_error();
+                    command++;
+                }
+                
+                int history_index = parseCommand(command);
+                if(history_index < 0)
+                {
+                    parsing_int_error();
                     free(tokens);
                     continue;
                 }
-            }
-            else if(*command == '-')
-            {
-                command++;
-            }
-
-            // Here we should work on how to parse the string into an integer
-            // Also solve how we jump this section coming from new tokens
-             printf("%d\n",parseCommand(command));
-            
-            continue;
+                else if(history_index < 1 || history_index > 20)
+                {
+                    value_out_of_bounds_error();
+                    free(tokens);
+                    continue;
+                }
+                else
+                {
+                    tokens = get_tokens(strdup(history[history_len-history_index]));
+                }
+            }            
         }
         else if(**tokens == '!' && *(tokens+1))
         {
@@ -128,9 +145,7 @@ int main(void){
         }
         else if(!strcmp(*tokens, "history"))
         {
-            for(int i = 0; i < history_len; i++){
-                printf("%d : %s", i, history[i]);
-            }
+            print_history(history, history_len);
         }
         else 
         {
@@ -141,7 +156,6 @@ int main(void){
     }
     
     reset_env(starting_dir, starting_HOME, starting_PATH);
-
     free(history);
     
     return 0;

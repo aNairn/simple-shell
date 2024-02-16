@@ -1,6 +1,7 @@
 {
     "files.associations": {
         "simpleshell.h": "c",
-        "stdio.h": "c"
+        "stdio.h": "c",
+        "error.h": "c"
     }
 }
