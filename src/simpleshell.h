@@ -23,6 +23,8 @@ void run_fork(char ** tokens);
 
 void reset_env(char * starting_dir, char * starting_HOME, char * starting_PATH);
 
+int parseCommand(char * command);
+
 // error handling
 
 void to_few_args_err();

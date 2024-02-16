@@ -182,6 +182,25 @@ void reset_env(char * starting_dir, char * starting_HOME, char * starting_PATH){
     printf("Exiting...\n");
 }
 
+int parseCommand(char * command){
+    if(*(command+2))
+        return -1;
+    if(!*command)
+        return -1;
+    if((*command < '0' || *command > '9'))
+        return -1;
+
+
+    if(*(command+1)){
+        if( *command < '0' || *command > '9' )
+            return -1;
+        if( *(command+1) < '0' || *(command+1)>'9' )
+            return -1;
+    }
+    
+    return 0;
+}
+
 // error handling
 
 void to_few_args_err(){

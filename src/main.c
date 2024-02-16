@@ -36,18 +36,21 @@ int main(void){
         {
             continue;
         }
-        
         tokens = get_tokens(strdup(user_in));
             
         // CHECKING HISTORY
-        if(*tokens[0] == '!' && !*(tokens+1))
+        if(*tokens == NULL)
+        {
+            continue;
+        }
+        else if(*tokens[0] == '!' && !*(tokens+1))
         {
             char * command = *tokens+1;
             
             if(*command == '!')
             {
                 command++;
-                
+            
                 if(*command != '\0')
                 {
                     to_many_args_err();
@@ -72,8 +75,9 @@ int main(void){
 
             // Here we should work on how to parse the string into an integer
             // Also solve how we jump this section coming from new tokens
-
-
+             printf("%d\n",parseCommand(command));
+            
+            continue;
         }
         else if(**tokens == '!' && *(tokens+1))
         {
@@ -89,10 +93,7 @@ int main(void){
         }
 
         // Make sure tokens are valid
-        if(*tokens == NULL)
-        {
-            continue;
-        }
+        
 
         
 
