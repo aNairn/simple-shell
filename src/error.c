@@ -5,7 +5,7 @@
 #include <sys/wait.h>
 #include <sys/stat.h>
 
-#include "error.h"
+#include "error.h" 
 
 #define INPUT_LIMIT 512
 
