@@ -27,6 +27,4 @@ int parseCommand(char * command);
 
 void print_history(char ** history, int history_len);
 
-// test functions
-
-void test_tokens(char ** tokens);
+void print_tokens(char ** tokens);

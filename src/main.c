@@ -5,6 +5,7 @@
 
 #include "simpleshell.h"
 #include "error.h"
+#include "tests.h"
 
 int main(void){
     char * starting_dir = get_cwd();
@@ -119,6 +120,21 @@ int main(void){
             free(tokens);
             break;
         }
+        else if(!strcmp(*tokens, "test"))
+        {
+            if(*(tokens+1))
+            {
+                to_many_args_err();
+            }
+            else
+            {
+                testing_mode();
+            }
+        }
+        else if (!strcmp(*tokens, "tokens"))
+        {
+            print_tokens(tokens);
+        }        
         else if(!strcmp(*tokens, "cd"))
         {
             change_dir(tokens+1);

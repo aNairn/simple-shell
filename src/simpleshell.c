@@ -6,6 +6,7 @@
 #include <sys/stat.h>
 
 #include "simpleshell.h"
+#include "tests.h"
 #include "error.h"
 
 #define BUFFER_SIZE 1024
@@ -234,14 +235,12 @@ int parseCommand(char * command)
 
 void print_history(char ** history, int history_len)
 {
-    for(int i = history_len-1; i >= 0; i--){
-        printf("%d : %s", i+1, history[i]);
+    for(int i = 0; i < history_len; i++){
+        printf("%d : %s", history_len-i, history[i]);
     }
 }
 
-// test functions
-
-void test_tokens(char ** tokens)
+void print_tokens(char ** tokens)
 {
     while (*tokens != NULL)
     {    

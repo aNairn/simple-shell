@@ -69,3 +69,11 @@ Please update this file with anything you think needs done we can discuss stuff 
 - [x] Print History if the form of \<No> \<command>
 - [x] If command found in history it should be ran like any other command but there should be no history check 
 
+# Stage Six
+- [ ] Create a new file to save the history to
+        - might need to save positions if doing circular array.
+- [ ] Read history from the file
+- [ ] Save history to the history array with all the corrct pointers
+- [ ] Make sure the history stays in the same order between instances
+
+# Stage Seven
