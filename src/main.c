@@ -7,64 +7,65 @@
 #include "error.h"
 #include "testing/tests.h"
 
-int main(void){
-    char * starting_dir = get_cwd();
-    char * starting_PATH = getenv("PATH");
-    char * starting_HOME = getenv("HOME");
-    
-    char ** history = create_history_array();
-    
-    struct Alias ** aliases = create_alias_array();
+int main(void)
+{
+    char *starting_dir = get_cwd();
+    char *starting_PATH = getenv("PATH");
+    char *starting_HOME = getenv("HOME");
+
+    char **history = create_history_array();
+
+    struct Alias **aliases = create_alias_array();
 
     int history_len = 0;
-    
+
     chdir(getenv("HOME"));
 
-    while(1)
+    while (1)
     {
-        char ** tokens;
+        char **tokens;
 
-        char * user_in;
-        char * cwd = get_cwd();
-        
+        char *user_in;
+        char *cwd = get_cwd();
+
         display_prompt(cwd);
 
         user_in = get_users_input();
 
         int valid_input = input_is_valid(user_in);
-        
-        if(valid_input == -1) 
+
+        if (valid_input == -1)
         {
             break;
         }
-        else if(valid_input == 0) 
+        else if (valid_input == 0)
         {
             continue;
         }
 
         tokens = get_tokens(strdup(user_in));
-        
+
         // CHECKING HISTORY
-        if(*tokens == NULL)
+        if (*tokens == NULL)
         {
             continue;
         }
-        else if(*tokens[0] == '!' && !*(tokens+1))
+        else if (*tokens[0] == '!' && !*(tokens + 1))
         {
-            if(history_len < 1)
+            if (history_len < 1)
             {
                 empty_history_error();
                 free(tokens);
                 continue;
             }
 
-            char * command = *tokens+1;
-            
-            if(*command == '!')
+            char *command = *tokens + 1;
+
+            if (*command == '!')
             {
                 command++;
-            
-                if(*command != '\0')
+
+                if (*command != '\0')
                 {
                     to_many_args_err();
                     free(tokens);
@@ -72,24 +73,24 @@ int main(void){
                 }
                 else
                 {
-                    tokens = get_tokens(strdup(history[history_len-1]));
+                    tokens = get_tokens(strdup(history[history_len - 1]));
                 }
             }
             else
             {
-                if(*command == '-')
+                if (*command == '-')
                 {
                     command++;
                 }
-                
+
                 int history_index = parseCommand(command);
-                if(history_index < 0)
+                if (history_index < 0)
                 {
                     parsing_int_error();
                     free(tokens);
                     continue;
                 }
-                else if(history_index < 1 || history_index > 20)
+                else if (history_index < 1 || history_index > 20)
                 {
                     value_out_of_bounds_error();
                     free(tokens);
@@ -97,11 +98,11 @@ int main(void){
                 }
                 else
                 {
-                    tokens = get_tokens(strdup(history[history_len-history_index]));
+                    tokens = get_tokens(strdup(history[history_len - history_index]));
                 }
-            }            
+            }
         }
-        else if(**tokens == '!' && *(tokens+1))
+        else if (**tokens == '!' && *(tokens + 1))
         {
             to_many_args_err();
             free(tokens);
@@ -113,9 +114,26 @@ int main(void){
             history_len++;
         }
 
-        if(!strcmp(*tokens, "alias"))
+        char * alias_check = *tokens;
+        int i = 0;
+        while(*aliases != NULL)
         {
-            if(!(*tokens+1))
+            Alias * alias = *aliases;
+            
+            if(!strcmp(alias->name, alias_check)){
+                ++tokens;
+                char ** command = alias->command_tokens;
+                tokens = fetch_alias(tokens, command);
+                break;
+            }
+            ++aliases;
+            ++i;
+        }
+        aliases-=i;
+
+        if (!strcmp(*tokens, "alias"))
+        {  
+            if (*(tokens + 1) == NULL)
             {
                 print_aliases(aliases);
                 free(tokens);
@@ -123,34 +141,35 @@ int main(void){
             }
             else
             {
-                if(*(tokens+3)) 
+                char *name = *(tokens + 1);
+                char **command = tokens + 2;
+                
+                if(*command == NULL)
                 {
-                    to_many_args_err();
-                    free(tokens);
+                    to_few_args_err();
                     continue;
-                }
+                }    
 
-                char * name = *(tokens+1);
-                char * command = *(tokens+2);
-                
-                Alias * alias = create_alias(name, command);
-                
+                Alias *alias = create_alias(name, command);
+
                 add_alias(aliases, alias);
+                continue;
             }
         }
-        else if(!strcmp(*tokens, "unalias"))
+        else if (!strcmp(*tokens, "unalias"))
         {
-
+            // REMOVE ALIAS
         }
-        
-        if(!strcmp(*tokens, "exit"))
+
+
+        if (!strcmp(*tokens, "exit"))
         {
             free(tokens);
             break;
         }
-        else if(!strcmp(*tokens, "test"))
+        else if (!strcmp(*tokens, "test"))
         {
-            if(*(tokens+1))
+            if (*(tokens + 1))
             {
                 to_many_args_err();
             }
@@ -162,45 +181,45 @@ int main(void){
         else if (!strcmp(*tokens, "tokens"))
         {
             print_tokens(tokens);
-        }        
-        else if(!strcmp(*tokens, "cd"))
-        {
-            change_dir(tokens+1);
         }
-        else if(!strcmp(*tokens, "sethome"))
+        else if (!strcmp(*tokens, "cd"))
         {
-            change_home(tokens+1);
+            change_dir(tokens + 1);
         }
-        else if(!strcmp(*tokens, "gethome"))
+        else if (!strcmp(*tokens, "sethome"))
+        {
+            change_home(tokens + 1);
+        }
+        else if (!strcmp(*tokens, "gethome"))
         {
             print_home();
         }
-        else if(!strcmp(*tokens, "setpath"))
+        else if (!strcmp(*tokens, "setpath"))
         {
-            change_path(tokens+1);
+            change_path(tokens + 1);
         }
-        else if(!strcmp(*tokens, "getpath"))
+        else if (!strcmp(*tokens, "getpath"))
         {
             print_path();
         }
-        else if(!strcmp(*tokens, "restorepath"))
+        else if (!strcmp(*tokens, "restorepath"))
         {
             change_path(&starting_PATH);
         }
-        else if(!strcmp(*tokens, "history"))
+        else if (!strcmp(*tokens, "history"))
         {
             print_history(history, history_len);
         }
-        else 
+        else
         {
             run_fork(tokens);
         }
-    
+
         free(tokens);
     }
-    
+
     reset_env(starting_dir, starting_HOME, starting_PATH);
     free(history);
-    
+
     return 0;
 }

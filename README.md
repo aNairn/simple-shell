@@ -83,12 +83,13 @@ Please update this file with anything you think needs done we can discuss stuff 
 - [x] or set up another structure to map keys to \(values alias to command)
 - [x] one->many   alias->command
 - [x] check for alias first (takes priority over other commands)
-- [ ] only one alias check 
-- [ ] alias <name> <command>
+- [x] only one alias check 
+- [x] alias <name> <command>
 - [ ] unalias <command>
-- [ ] <alias> [runs alias]
-- [ ] "alias" [prints all alias]
+- [x] <alias> [runs alias]
+- [x] "alias" [prints all alias]
 - [ ] if alias exists jsut replace it with the new one
+- [ ] extend alias array 
 
 
 
