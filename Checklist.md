@@ -72,6 +72,7 @@ Please update this file with anything you think needs done we can discuss stuff 
 # Stage Six
 - [ ] Create a new file to save the history to
         - might need to save positions if doing circular array.
+- [ ] Save a history command per line of the txt file to make it easier to read back in
 - [ ] Read history from the file
 - [ ] Save history to the history array with all the corrct pointers
 - [ ] Make sure the history stays in the same order between instances
