@@ -4,8 +4,8 @@
 #include <unistd.h>
 #include <sys/wait.h>
 
-#include "simpleshell.h"
-#include "error.h"
+#include "../simpleshell.h"
+#include "../error.h"
 #include "tests.h"
 
 void testing_mode(){

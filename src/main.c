@@ -5,14 +5,16 @@
 
 #include "simpleshell.h"
 #include "error.h"
-#include "tests.h"
+#include "testing/tests.h"
 
 int main(void){
     char * starting_dir = get_cwd();
     char * starting_PATH = getenv("PATH");
     char * starting_HOME = getenv("HOME");
     
-    char ** history = malloc(20*sizeof(char *));
+    char ** history = create_history_array();
+    
+    struct Alias ** aliases = create_alias_array();
 
     int history_len = 0;
     
@@ -21,6 +23,7 @@ int main(void){
     while(1)
     {
         char ** tokens;
+
         char * user_in;
         char * cwd = get_cwd();
         
@@ -38,8 +41,9 @@ int main(void){
         {
             continue;
         }
+
         tokens = get_tokens(strdup(user_in));
-            
+        
         // CHECKING HISTORY
         if(*tokens == NULL)
         {
@@ -105,16 +109,40 @@ int main(void){
         }
         else
         {
-            // Add the current command to history
             history[history_len] = strdup(user_in);
             history_len++;
         }
 
-        // Make sure tokens are valid
-        
+        if(!strcmp(*tokens, "alias"))
+        {
+            if(!(*tokens+1))
+            {
+                print_aliases(aliases);
+                free(tokens);
+                continue;
+            }
+            else
+            {
+                if(*(tokens+3)) 
+                {
+                    to_many_args_err();
+                    free(tokens);
+                    continue;
+                }
 
-        
+                char * name = *(tokens+1);
+                char * command = *(tokens+2);
+                
+                Alias * alias = create_alias(name, command);
+                
+                add_alias(aliases, alias);
+            }
+        }
+        else if(!strcmp(*tokens, "unalias"))
+        {
 
+        }
+        
         if(!strcmp(*tokens, "exit"))
         {
             free(tokens);

@@ -6,7 +6,7 @@
 #include <sys/stat.h>
 
 #include "simpleshell.h"
-#include "tests.h"
+#include "testing/tests.h"
 #include "error.h"
 
 #define BUFFER_SIZE 1024
@@ -15,6 +15,8 @@
 
 
 // functions
+
+
 
 char * get_cwd()
 {  
@@ -63,7 +65,7 @@ char ** get_tokens(char * input)
             buff*=2;
             tokens = realloc(tokens, buff * sizeof(char *));
             if(!tokens){
-                perror("allocation error");
+                perror("<Allocation Error>");
             }
         }
         token = strtok(NULL, TOKEN_DELIM);
@@ -72,7 +74,8 @@ char ** get_tokens(char * input)
     return tokens;
 }
 
-void change_dir(char ** tokens){  
+void change_dir(char ** tokens)
+{  
     if(*tokens == NULL){
         chdir(getenv("HOME"));
     }
@@ -233,6 +236,16 @@ int parseCommand(char * command)
     return history_value;
 }
 
+char ** create_history_array()
+{
+    char ** history = malloc(20*sizeof(char *));
+    if(!history)
+    {
+        perror("<Allocation Error>");
+    }
+    return history;
+}
+
 void print_history(char ** history, int history_len)
 {
     for(int i = 0; i < history_len; i++){
@@ -246,5 +259,56 @@ void print_tokens(char ** tokens)
     {    
         printf("\"%s\"\n", *tokens);
         tokens++;
+    }
+}
+
+Alias ** create_alias_array()
+{
+    Alias ** aliases = malloc(10*sizeof(Alias*));
+    if(!aliases)
+    {
+        perror("<Allocation Error>");
+    }
+    return aliases;
+} 
+
+Alias * create_alias(char * name, char * command)
+{
+    Alias * alias = malloc(sizeof(Alias));
+    char ** tokens = get_tokens(command);
+    alias->name = name;
+    alias->commamd_tokens = tokens;
+    return alias;
+}
+
+void add_alias(Alias ** aliases, Alias * alias)
+{
+    int len = sizeof(aliases)/sizeof(aliases[0]);
+    if(!aliases+len)
+    {
+        aliases = realloc(aliases, 2*sizeof(aliases));
+        if(!aliases)
+        {
+            perror("<Allocation Error>");
+        }
+    }
+    int i = 0;
+    while(aliases+i) ++i;
+    aliases[i] = alias; 
+}
+
+void print_aliases(Alias ** aliases)
+{
+    while(*aliases != NULL)
+    {
+        printf("{ %s : ", (*aliases)->name);
+        char ** tokens = (*aliases)->commamd_tokens;
+        while (*tokens != NULL)
+        {    
+            printf("\"%s\" ", *tokens);
+            ++tokens;
+        }
+        printf("}\n");
+        aliases++;
     }
 }

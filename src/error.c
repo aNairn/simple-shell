@@ -6,7 +6,7 @@
 #include <sys/stat.h>
 
 #include "error.h" 
-#include "tests.h"
+#include "testing/tests.h"
 
 #define INPUT_LIMIT 512
 
