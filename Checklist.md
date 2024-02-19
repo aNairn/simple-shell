@@ -78,3 +78,14 @@ Please update this file with anything you think needs done we can discuss stuff 
 - [ ] Make sure the history stays in the same order between instances
 
 # Stage Seven
+
+- [ ] look into 2 dimensional arrays for storing alias and the original command
+- [ ] or set up another structure to map keys to \(values alias to command)
+- [ ] one to many alias command
+- [ ] check for alias first (takes priority over other commands)
+- [ ] only one alias check 
+- [ ] alias <name> <command>
+- [ ] unalias <command>
+- [ ] <alias> [runs alias]
+- [ ] "alias" [prints all alias]
+
