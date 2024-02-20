@@ -270,7 +270,7 @@ void print_tokens(char **tokens)
 
 Alias **create_alias_array()
 {
-    Alias **aliases = malloc(10 * sizeof(Alias));
+    Alias **aliases = malloc(10*sizeof(Alias *));
     if (!aliases)
     {
         perror("<Allocation Error>");
@@ -315,7 +315,6 @@ char **fetch_alias(char ** tokens, char ** alias_command)
     int j = 0;
     while(*alias_command)
     {
-        printf("this\n");
         new_tokens[j] = *alias_command;
         ++alias_command;
         ++j;
@@ -334,14 +333,14 @@ void print_aliases(Alias **aliases)
     while (*aliases != NULL)
     {
         Alias * alias = *aliases;
-        printf("{ %s : ", alias->name);
+        printf("{ %s : \" ", alias->name);
         char **tokens = alias->command_tokens;
         while (*tokens != NULL)
         {
             printf("%s ", *tokens);
             ++tokens;
         }
-        printf(" }\n");
+        printf("\" }\n");
         aliases++;
     }
 }

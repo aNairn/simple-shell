@@ -143,7 +143,6 @@ int main(void)
             {
                 char *name = *(tokens + 1);
                 char **command = tokens + 2;
-                
                 if(*command == NULL)
                 {
                     to_few_args_err();
