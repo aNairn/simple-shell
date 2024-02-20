@@ -161,7 +161,6 @@ int main(void)
             // REMOVE ALIAS
         }
 
-
         if (!strcmp(*tokens, "exit"))
         {
             free(tokens);

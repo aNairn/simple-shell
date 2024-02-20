@@ -77,7 +77,7 @@ void change_dir(char **tokens)
 {
     if (*tokens == NULL)
     {
-        chdir(getenv("HOME"));
+        to_few_args_err();
     }
     else if (*(tokens + 1) != NULL)
     {

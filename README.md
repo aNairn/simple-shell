@@ -91,8 +91,14 @@ Please update this file with anything you think needs done we can discuss stuff 
 - [ ] if alias exists jsut replace it with the new one
 - [ ] extend alias array 
 
+# ERRORS
+- [x] fix empty alias to few args
+- [x] fix error with empty cd
 
+# FIXES
+- [ ] test file needs updated to be able to work with future features
 
+  
 
 ## Getting started
 
