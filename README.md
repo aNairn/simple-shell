@@ -89,7 +89,7 @@ Please update this file with anything you think needs done we can discuss stuff 
 - [x] <alias> [runs alias]
 - [x] "alias" [prints all alias]
 - [ ] if alias exists jsut replace it with the new one
-- [ ] extend alias array 
+- [x] cap aliases at 10
 
 # ERRORS
 - [x] fix empty alias to few args
