@@ -22,3 +22,5 @@ void parsing_int_error();
 void value_out_of_bounds_error();
 
 void aliases_full_err();
+
+void no_alias_found_err();

@@ -271,12 +271,26 @@ void print_tokens(char **tokens)
 
 Alias **create_alias_array()
 {
-    Alias **aliases = malloc(10*sizeof(Alias *));
+    Alias **aliases = malloc(MAX_ALIASES * sizeof(Alias *));
     if (!aliases)
     {
         perror("<Allocation Error>");
     }
     return aliases;
+}
+
+Alias *alias_exists(Alias **aliases, char *name)
+{
+    while (*aliases)
+    {
+        Alias *alias = *aliases;
+        if (!strcmp(alias->name, name))
+        {
+            return alias;
+        }
+        ++aliases;
+    }
+    return NULL;
 }
 
 Alias *create_alias(char *name, char **tokens)
@@ -290,14 +304,14 @@ Alias *create_alias(char *name, char **tokens)
 
 int add_alias(Alias **aliases, Alias *alias, int aliases_len)
 {
-    printf("%d\n", aliases_len);
-    if(aliases_len >= MAX_ALIASES){
+    if (aliases_len >= MAX_ALIASES)
+    {
         aliases_full_err();
         return 0;
     }
 
     int i = 0;
-    
+
     while (*(aliases + i))
         ++i;
 
@@ -305,30 +319,37 @@ int add_alias(Alias **aliases, Alias *alias, int aliases_len)
     return 1;
 }
 
-char **fetch_alias(char ** tokens, char ** alias_command)
-{     
-    char ** new_tokens = malloc(sizeof(tokens)+sizeof(alias_command));
-    int j = 0;
-    while(*alias_command)
+char **fetch_alias(char **tokens, char **alias_command)
+{
+    char **new_tokens = malloc(sizeof(tokens) + sizeof(alias_command));
+    int i = 0;
+    while (*alias_command)
     {
-        new_tokens[j] = *alias_command;
+        new_tokens[i] = *alias_command;
         ++alias_command;
-        ++j;
+        ++i;
     }
-    while(*tokens)
+    while (*tokens)
     {
-        new_tokens[j] = *tokens;
+        new_tokens[i] = *tokens;
         ++tokens;
-        ++j;
+        ++i;
     }
     return new_tokens;
+}
+
+char **get_alias_command(Alias *alias, char **tokens)
+{
+    ++tokens;
+    char **command = alias->command_tokens;
+    return fetch_alias(tokens, command);
 }
 
 void print_aliases(Alias **aliases)
 {
     while (*aliases != NULL)
     {
-        Alias * alias = *aliases;
+        Alias *alias = *aliases;
         printf("{ %s : \" ", alias->name);
         char **tokens = alias->command_tokens;
         while (*tokens != NULL)
@@ -339,4 +360,24 @@ void print_aliases(Alias **aliases)
         printf("\" }\n");
         aliases++;
     }
+}
+
+Alias **remove_alias(Alias **aliases, char *name)
+{
+    Alias **new_aliases_list = create_alias_array();
+    int i = 0;
+    while(*aliases)
+    {
+        Alias *alias = *aliases;
+        if(!strcmp(alias->name, name))
+        {
+            ++aliases;
+            continue;
+        }
+        new_aliases_list[i] = alias;
+        i++;
+        ++aliases;
+    }
+    // free(aliases);
+    return new_aliases_list;
 }

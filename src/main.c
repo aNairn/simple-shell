@@ -45,7 +45,7 @@ int main(void)
 
         tokens = get_tokens(strdup(user_in));
 
-        // CHECKING HISTORY
+        // ====== CHECKING HISTORY ========
         if (*tokens == NULL)
         {
             continue;
@@ -114,25 +114,15 @@ int main(void)
             history_len++;
         }
 
-        char * alias_check = *tokens;
-        int i = 0;
-        while(*aliases != NULL)
+        // ====== CHECKING ALIASES ========
+        Alias * existing_alias;
+        if((existing_alias = alias_exists(aliases, *tokens)))
         {
-            Alias * alias = *aliases;
-            
-            if(!strcmp(alias->name, alias_check)){
-                ++tokens;
-                char ** command = alias->command_tokens;
-                tokens = fetch_alias(tokens, command);
-                break;
-            }
-            ++aliases;
-            ++i;
+            tokens = get_alias_command(existing_alias, tokens);
         }
-        aliases-=i;
 
         if (!strcmp(*tokens, "alias"))
-        {  
+        {
             if (*(tokens + 1) == NULL)
             {
                 print_aliases(aliases);
@@ -143,15 +133,24 @@ int main(void)
             {
                 char *name = *(tokens + 1);
                 char **command = tokens + 2;
-                if(*command == NULL)
+
+                if (*command == NULL)
                 {
                     to_few_args_err();
                     continue;
-                }    
+                }
+
+                Alias *existing_alias;
+                if((existing_alias = alias_exists(aliases, name)))
+                {
+                    existing_alias->command_tokens = command;
+                    continue;
+                }
 
                 Alias *alias = create_alias(name, command);
 
-                if(add_alias(aliases, alias, aliases_len)){
+                if (add_alias(aliases, alias, aliases_len))
+                {
                     ++aliases_len;
                 }
                 continue;
@@ -159,9 +158,31 @@ int main(void)
         }
         else if (!strcmp(*tokens, "unalias"))
         {
-            // REMOVE ALIAS
+            tokens++;
+            if(!*tokens)
+            {
+                to_few_args_err();
+                continue;
+            }
+            else if(*(tokens+1))
+            {
+                to_many_args_err();
+                continue;
+            }
+            char *name = *tokens;
+            if(alias_exists(aliases, name))
+            {
+                aliases = remove_alias(aliases, name);
+                aliases_len--;
+            }
+            else
+            {
+                no_alias_found_err();
+            }
+            continue;
         }
 
+        // ====== RUNNING COMMANDS ========
         if (!strcmp(*tokens, "exit"))
         {
             free(tokens);

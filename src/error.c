@@ -78,3 +78,8 @@ void aliases_full_err()
 {
     perror("<Aliases Full : Try removing unwanted aliases>");
 }
+
+void no_alias_found_err()
+{
+    perror("<No Alias Found>");
+}

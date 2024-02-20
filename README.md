@@ -85,10 +85,10 @@ Please update this file with anything you think needs done we can discuss stuff 
 - [x] check for alias first (takes priority over other commands)
 - [x] only one alias check 
 - [x] alias <name> <command>
-- [ ] unalias <command>
+- [x] unalias <command>
 - [x] <alias> [runs alias]
 - [x] "alias" [prints all alias]
-- [ ] if alias exists jsut replace it with the new one
+- [x] if alias exists jsut replace it with the new one
 - [x] cap aliases at 10
 
 # ERRORS
