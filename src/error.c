@@ -73,3 +73,8 @@ void value_out_of_bounds_error()
 {
     perror("<Value entered out of range>");
 }
+
+void aliases_full_err()
+{
+    perror("<Aliases Full : Try removing unwanted aliases>");
+}

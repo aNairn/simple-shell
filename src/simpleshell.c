@@ -12,6 +12,7 @@
 #define BUFFER_SIZE 1024
 #define INPUT_LIMIT 512
 #define TOKEN_DELIM " \t\n|><&;"
+#define MAX_ALIASES 10
 
 // functions
 
@@ -287,19 +288,13 @@ Alias *create_alias(char *name, char **tokens)
     return alias;
 }
 
-void add_alias(Alias **aliases, Alias *alias)
+int add_alias(Alias **aliases, Alias *alias, int aliases_len)
 {
-    // int len = sizeof(aliases)/sizeof(alias);
-    // printf("%d\n", len);
-
-    // if (*(aliases + len))
-    // {
-    //     aliases = realloc(aliases, 2 * sizeof(aliases));
-    //     if (!aliases)
-    //     {
-    //         perror("<Allocation Error>");
-    //     }
-    // }
+    printf("%d\n", aliases_len);
+    if(aliases_len >= MAX_ALIASES){
+        aliases_full_err();
+        return 0;
+    }
 
     int i = 0;
     
@@ -307,6 +302,7 @@ void add_alias(Alias **aliases, Alias *alias)
         ++i;
 
     aliases[i] = alias;
+    return 1;
 }
 
 char **fetch_alias(char ** tokens, char ** alias_command)

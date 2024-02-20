@@ -43,7 +43,7 @@ Alias **create_alias_array();
 
 Alias *create_alias(char *name, char **tokens);
 
-void add_alias(Alias **aliases, Alias *alias);
+int add_alias(Alias **aliases, Alias *alias, int aliases_len);
 
 char **fetch_alias(char ** tokens, char ** alias_command);
 

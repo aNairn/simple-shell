@@ -14,10 +14,10 @@ int main(void)
     char *starting_HOME = getenv("HOME");
 
     char **history = create_history_array();
+    int history_len = 0;
 
     struct Alias **aliases = create_alias_array();
-
-    int history_len = 0;
+    int aliases_len = 0;
 
     chdir(getenv("HOME"));
 
@@ -151,7 +151,9 @@ int main(void)
 
                 Alias *alias = create_alias(name, command);
 
-                add_alias(aliases, alias);
+                if(add_alias(aliases, alias, aliases_len)){
+                    ++aliases_len;
+                }
                 continue;
             }
         }
