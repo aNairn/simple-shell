@@ -1,14 +1,16 @@
 
-// structs
-
+// STRUCT
 typedef struct Alias
 {
     char *name;
     char **command_tokens;
 } Alias;
 
-// functions
+// MAIN.c FUNCTIONS
+int run(char *user_in, char **history, int *history_len, Alias ***aliases, int *aliases_len);
 
+
+// SIMPLESHELL.c FUNCTIONS
 char *get_cwd();
 
 void display_prompt(char *cwd);
@@ -54,3 +56,35 @@ char **get_alias_command(Alias *alias, char **tokens);
 void print_aliases(Alias **aliases);
 
 Alias **remove_alias(Alias **aliases, char *name);
+
+
+// ERRORS
+void to_few_args_err();
+
+void input_too_long_error();
+
+int input_is_valid(char * input);
+
+void fork_error();
+
+void to_many_args_err();
+
+void not_valid_dir(char **tokens);
+
+void cd_into_file_error(char ** tokens);
+
+void empty_history_error();
+
+void parsing_int_error();
+
+void value_out_of_bounds_error();
+
+void aliases_full_err();
+
+void no_alias_found_err();
+
+
+// TESTING
+void testing_mode();
+
+void test_tokens(char ** tokens);

@@ -5,8 +5,7 @@
 #include <sys/wait.h>
 #include <sys/stat.h>
 
-#include "error.h" 
-#include "testing/tests.h"
+#include "simpleshell.h" 
 
 #define INPUT_LIMIT 512
 

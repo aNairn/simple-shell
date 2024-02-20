@@ -3,6 +3,7 @@
         "simpleshell.h": "c",
         "stdio.h": "c",
         "error.h": "c",
-        "typeinfo": "c"
+        "typeinfo": "c",
+        "tests.h": "c"
     }
 }

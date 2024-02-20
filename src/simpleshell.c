@@ -6,8 +6,7 @@
 #include <sys/stat.h>
 
 #include "simpleshell.h"
-#include "testing/tests.h"
-#include "error.h"
+// #include "error.h"
 
 #define BUFFER_SIZE 1024
 #define INPUT_LIMIT 512
