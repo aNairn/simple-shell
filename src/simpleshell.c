@@ -233,10 +233,10 @@ int parseCommand(char * command)
     return history_value;
 }
 
-void print_history(char ** history, int history_len)
+void print_history(char ** history, int history_len, int history_index, int HISTORY_SIZE)
 {
     for(int i = 0; i < history_len; i++){
-        printf("%d : %s", history_len-i, history[i]);
+        printf("%d : %s", history_len-i, history[(i + history_index) % HISTORY_SIZE]);
     }
 }
 

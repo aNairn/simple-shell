@@ -7,14 +7,17 @@
 #include "error.h"
 #include "tests.h"
 
+#define HISTORY_SIZE 20
+
 int main(void){
     char * starting_dir = get_cwd();
     char * starting_PATH = getenv("PATH");
     char * starting_HOME = getenv("HOME");
     
-    char ** history = malloc(20*sizeof(char *));
+    char ** history = malloc(HISTORY_SIZE*sizeof(char *));
 
     int history_len = 0;
+    int history_index = 0;
     
     chdir(getenv("HOME"));
 
@@ -68,7 +71,7 @@ int main(void){
                 }
                 else
                 {
-                    tokens = get_tokens(strdup(history[history_len-1]));
+                    tokens = get_tokens(strdup(history[(history_index - 1 + HISTORY_SIZE) % HISTORY_SIZE]));
                 }
             }
             else
@@ -85,7 +88,7 @@ int main(void){
                     free(tokens);
                     continue;
                 }
-                else if(history_index < 1 || history_index > 20)
+                else if(history_index < 1 || history_index > HISTORY_SIZE)
                 {
                     value_out_of_bounds_error();
                     free(tokens);
@@ -93,7 +96,7 @@ int main(void){
                 }
                 else
                 {
-                    tokens = get_tokens(strdup(history[history_len-history_index]));
+                    tokens = get_tokens(strdup(history[(history_index - 1 + HISTORY_SIZE) % HISTORY_SIZE]));
                 }
             }            
         }
@@ -106,14 +109,13 @@ int main(void){
         else
         {
             // Add the current command to history
-            history[history_len] = strdup(user_in);
-            history_len++;
+            free(history[history_index]);
+            history[history_index] = strdup(user_in);
+            history_index = (history_index + 1) % HISTORY_SIZE;
+            history_len = (history_len < HISTORY_SIZE) ? history_len + 1 : HISTORY_SIZE;
         }
 
         // Make sure tokens are valid
-        
-
-        
 
         if(!strcmp(*tokens, "exit"))
         {
@@ -161,7 +163,7 @@ int main(void){
         }
         else if(!strcmp(*tokens, "history"))
         {
-            print_history(history, history_len);
+            print_history(history, history_len, history_index, HISTORY_SIZE);
         }
         else 
         {
@@ -172,6 +174,9 @@ int main(void){
     }
     
     reset_env(starting_dir, starting_HOME, starting_PATH);
+    for (int i = 0; i < HISTORY_SIZE; i++) {
+            free(history[i]);
+        }
     free(history);
     
     return 0;

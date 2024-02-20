@@ -25,6 +25,6 @@ void reset_env(char * starting_dir, char * starting_HOME, char * starting_PATH);
 
 int parseCommand(char * command);
 
-void print_history(char ** history, int history_len);
+void print_history(char ** history, int history_len, int history_index, int HISTORY_SIZE);
 
 void print_tokens(char ** tokens);
