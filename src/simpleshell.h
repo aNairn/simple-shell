@@ -23,22 +23,8 @@ void run_fork(char ** tokens);
 
 void reset_env(char * starting_dir, char * starting_HOME, char * starting_PATH);
 
-// error handling
+int parseCommand(char * command);
 
-void to_few_args_err();
+void print_history(char ** history, int history_len, int history_index, int HISTORY_SIZE);
 
-void input_too_long_error();
-
-int input_is_valid(char * token);
-
-void fork_error();
-
-void to_many_args_err();
-
-void not_valid_dir(char ** tokens);
-
-void cd_into_file_error(char ** tokens);
-
-// test functions
-
-void test_tokens(char ** tokens);
+void print_tokens(char ** tokens);

@@ -21,9 +21,9 @@ Please update this file with anything you think needs done we can discuss stuff 
 
 
 # Stage Two Strech
-- [] Write test file
+- [x] Write test file
 - [x] Add final perrors
-- [] Possible error file
+- [x] Possible error file
 
 
 # Stage Three
@@ -47,4 +47,32 @@ Please update this file with anything you think needs done we can discuss stuff 
 - [x] cd into a file should show an error saying its a file
 - [x] getpath setpath gethome sethome
 - [x] cd no arguments 
-- [x] not enough arguments for change path and change home
+- [x] not enough arguments for change path and change home# Stage Five
+
+
+# Stage Five
+- [x] Create a list of Strings to hold the commands entered during runtime
+- [x] Each time a command is ran add it to the History array
+- [x] Check for '!' being the first character
+- [x] Invoke command from history
+        - [x] !! ==> print last command
+        - [x] !1 ==> print first command
+        - [x] !-1 ==> print first command 
+- [x] If the number is greater or lower than the length of the History array throw error
+- [x] Treat 0 of the array as 1 and run the command at the index entered 
+        - [x] '!-1' ==> run the 0th command
+        - [x] '!-4' ==> run the 3rd command
+- [x] Pick a method of handling a full array
+        - circular array?
+- [x] Print History if the form of \<No> \<command>
+- [x] If command found in history it should be ran like any other command but there should be no history check 
+
+# Stage Six
+- [ ] Create a new file to save the history to
+        - might need to save positions if doing circular array.
+- [ ] Save a history command per line of the txt file to make it easier to read back in
+- [ ] Read history from the file
+- [ ] Save history to the history array with all the corrct pointers
+- [ ] Make sure the history stays in the same order between instances
+
+# Stage Seven
