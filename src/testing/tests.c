@@ -8,7 +8,6 @@
 
 void testing_mode()
 {
-
     pid_t pid = fork();
 
     if (pid < 0)
@@ -46,12 +45,15 @@ void testing_mode()
             "alias a b\n",
             "unalias a\n",
             "alias list ls\n",
+            "alias\n",
+            "alias list dir\n"
+            "alias\n",
             "list\n",
             "alias name\n",
             "unalias\n",
             "unalias fail this\n",
             "alias\n",
-            "history"
+            "history\n"
         };
         int test_no = sizeof(tests) / sizeof(tests[0]);
 
