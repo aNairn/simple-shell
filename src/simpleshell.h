@@ -10,6 +10,7 @@ typedef struct Alias
 int run(char *user_in, char **history, int *history_len, Alias ***aliases, int *aliases_len);
 
 
+
 // SIMPLESHELL.c FUNCTIONS
 char *get_cwd();
 

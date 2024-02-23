@@ -5,8 +5,13 @@
 
 #include "simpleshell.h"
 
+void splash_screen(){
+    printf("-------------------------------------------------------------------------------------\n---                                888             888888            _.---._      ---\n--                                 888             888888        __.'"".'/|\\`.""'.__   --\n--                                 888             888888       :__.' / | \\ `.__:  --\n-- .d8888b  .d88b.  8888b. .d8888b 88888b.  .d88b. 888888       '.'  /  |  \\  `.'  --\n-- 88K     d8P  Y8b    \"88b88K     888 \"88bd8P  Y8b888888        `. /   |   \\ .'   --\n-- \"Y8888b.88888888.d888888\"Y8888b.888  88888888888888888          `-.__|__.-'     --\n--      X88Y8b.    888  888     X88888  888Y8b.    888888                          --\n--- 88888P' \"Y8888 \"Y888888 88888P'888  888 \"Y8888 888888                         ---\n-------------------------------------------------------------------------------------\n\n");
+}
+
 int main(void)
 {
+    
     char *starting_dir  = get_cwd();
     char *starting_PATH = getenv("PATH");
     char *starting_HOME = getenv("HOME");
@@ -18,6 +23,9 @@ int main(void)
     int aliases_len = 0;
 
     chdir(getenv("HOME"));
+
+    run("clear", history, &history_len, &aliases, &aliases_len);
+    splash_screen();
 
     while (1)
     {
