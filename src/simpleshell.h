@@ -38,6 +38,8 @@ int parseCommand(char *command);
 
 char **create_history_array();
 
+int add_to_history(char **history, int history_len, char *user_in);
+
 void print_history(char **history, int history_len);
 
 void print_tokens(char **tokens);

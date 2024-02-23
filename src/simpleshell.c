@@ -12,6 +12,7 @@
 #define INPUT_LIMIT 512
 #define TOKEN_DELIM " \t\n|><&;"
 #define MAX_ALIASES 10
+#define MAX_HISTORY 20
 
 // functions
 
@@ -249,6 +250,20 @@ char **create_history_array()
         perror("<Allocation Error>");
     }
     return history;
+}
+
+int add_to_history(char **history, int history_len, char *user_in)
+{
+    if(history_len < MAX_HISTORY)
+    {
+        history[history_len] = strdup(user_in);
+        return 1;
+    }
+    --history_len;
+    for(int i = 0; i < history_len; i++)
+        history[i] = strdup(history[i+1]);
+    history[history_len] = strdup(user_in);
+    return 0;
 }
 
 void print_history(char **history, int history_len)
