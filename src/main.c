@@ -24,7 +24,6 @@ int main(void)
 
     chdir(getenv("HOME"));
 
-    run("clear\n", history, &history_len, &aliases, &aliases_len);
     splash_screen();
 
     while (1)
@@ -126,7 +125,7 @@ int run(char *user_in, char **history, int *history_len, Alias ***aliases, int *
         }
         else
         {
-            *history_len+=add_to_history(history, *history_len, user_in);
+            *history_len += add_to_history(history, *history_len, user_in);
         }
 
         // ====== CHECKING ALIASES ========

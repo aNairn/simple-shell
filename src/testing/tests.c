@@ -53,6 +53,7 @@ void testing_mode()
             "unalias\n",
             "unalias fail this\n",
             "alias\n",
+            "history\n",
             "history\n"
         };
         int test_no = sizeof(tests) / sizeof(tests[0]);
