@@ -256,7 +256,7 @@ void print_history(char **history, int history_len)
 {
     for (int i = 0; i < history_len; i++)
     {
-        printf("%d : %s", history_len - i, history[i]);
+        printf("%d : %s", i+1, history[i]);
     }
 }
 
@@ -307,7 +307,7 @@ void save_aliases(Alias **aliases, int aliases_len)
     FILE *file;
     file = fopen(ALIASES_FILENAME, "w");
     if (file == NULL) {
-        file_error();
+        file_error(ALIASES_FILENAME);
         return;
     }
     for (int i = 0; i < aliases_len; i++)
@@ -337,25 +337,23 @@ void save_aliases(Alias **aliases, int aliases_len)
 
 int read_aliases(Alias **aliases)
 {
-    // Alias **aliases = create_alias_array();
     int aliases_len = 0;
 
     FILE *file = fopen(ALIASES_FILENAME, "r");
     if (file == NULL) {
-        file_error();
+        file_error(ALIASES_FILENAME);
         return 0;
     }
     char line[150];
 
     while(fgets(line, sizeof(line), file) != NULL)
     {
-        int len = strlen(line)-1;
-        line[len] = '\0';
         char *input_string = malloc(sizeof(char)*150);
         strcpy(input_string, line);
         char **input_tokens = get_tokens(input_string);
         char *name = *input_tokens;
         ++input_tokens;
+        
         Alias *input_alias = create_alias(name, input_tokens);
         aliases_len+=add_alias(aliases, input_alias, aliases_len);
     }

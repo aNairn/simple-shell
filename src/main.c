@@ -11,6 +11,8 @@ void splash_screen(){
 
 int main(void)
 {
+    splash_screen();
+
     chdir(getenv("HOME"));
     
     char *starting_dir  = get_cwd();
@@ -22,9 +24,6 @@ int main(void)
 
     struct Alias **aliases = create_alias_array();
     int aliases_len = read_aliases(aliases);
-
-
-    splash_screen();
 
     while (1)
     {
@@ -39,6 +38,7 @@ int main(void)
     }
 
     reset_env(starting_dir, starting_HOME, starting_PATH);
+    chdir(starting_HOME);
     save_aliases(aliases, aliases_len);
     free(history);
 

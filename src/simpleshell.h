@@ -86,7 +86,7 @@ void aliases_full_err();
 
 void no_alias_found_err();
 
-void file_error();
+void file_error(char *file_name);
 
 // TESTING
 void testing_mode();

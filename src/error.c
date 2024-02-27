@@ -83,7 +83,15 @@ void no_alias_found_err()
     perror("<No Alias Found>");
 }
 
-void file_error()
+void file_error(char *file_name)
 {
-    perror("<Error opening file!>");
+    char *msg_frag = "<Error opening file ";
+    int msg_len = strlen(msg_frag)+strlen(file_name)+3;
+    char *msg = malloc(msg_len);
+    strcat(msg, msg_frag);
+    strcat(msg, "'");
+    strcat(msg, file_name);
+    strcat(msg, "'");
+    strcat(msg, ">");
+    perror(msg);
 }
