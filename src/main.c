@@ -24,7 +24,6 @@ int main(void)
 
     chdir(getenv("HOME"));
 
-    run("clear", history, &history_len, &aliases, &aliases_len);
     splash_screen();
 
     while (1)
