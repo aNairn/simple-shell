@@ -82,3 +82,8 @@ void no_alias_found_err()
 {
     perror("<No Alias Found>");
 }
+
+void file_error()
+{
+    perror("<Error opening file!>");
+}

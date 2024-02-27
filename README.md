@@ -98,13 +98,13 @@ Please update this file with anything you think needs done we can discuss stuff 
 
 # Stage Eight
 
-- [ ] create function for writing to a file
-- [ ] write each alias to a line [one alias per line] <alias alias command>
-- [ ] check the file has been created and matches post exit alias
-- [ ] create function for reading to a file
-- [ ] separate the aliase name from the command
-- [ ] tokenise the command and crete the alias struct
-- [ ] add all aliases to the alias list
+- [x] create function for writing to a file
+- [x] write each alias to a line [one alias per line] <alias alias command>
+- [x] check the file has been created and matches post exit alias
+- [x] create function for reading from a file
+- [x] separate the aliase name from the command
+- [x] tokenise the command and crete the alias struct
+- [x] add all aliases to the alias list
 
 # ERRORS!
 - [x] fix empty alias to few args
