@@ -301,6 +301,11 @@ Alias *create_alias(char *name, char **tokens)
     return alias;
 }
 
+void save_alias(Alias **aliases, int aliases_len)
+{
+    
+}
+
 int add_alias(Alias **aliases, Alias *alias, int aliases_len)
 {
     if (aliases_len >= MAX_ALIASES)
