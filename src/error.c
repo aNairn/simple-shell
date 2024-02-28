@@ -83,6 +83,17 @@ void no_alias_found_err()
     perror("<No Alias Found>");
 }
 
+void alias_override_msg(char *name)
+{
+     char *msg_head = "<Alias '";
+     char *msg_tail = "' updated>";
+     char *msg = malloc(strlen(msg_head) + strlen(name) + strlen(msg_tail));
+     strcat(msg, msg_head);
+     strcat(msg, name);
+     strcat(msg, msg_tail);
+     perror(msg);
+}   
+
 void file_error(char *file_name)
 {
     char *msg_frag = "<Error opening file ";
