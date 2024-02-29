@@ -6,7 +6,6 @@
 #include <sys/stat.h>
 
 #include "simpleshell.h"
-// #include "error.h"
 
 #define BUFFER_SIZE 1024
 #define INPUT_LIMIT 512
@@ -237,8 +236,9 @@ int parseCommand(char *command)
     else
     {
         history_value = ((*command) - 48) * 10;
-        history_value += ((*command) - 48);
+        history_value += ((*(command+1)) - 48);
     }
+
     return history_value;
 }
 
@@ -252,12 +252,19 @@ char **create_history_array()
     return history;
 }
 
-void print_history(char **history, int history_len)
+void print_history(char ** history, int history_len, int history_index, int HISTORY_SIZE)
 {
-    for (int i = 0; i < history_len; i++)
+    int print_index = 0;
+    int i = 1;
+    if(history_len == HISTORY_SIZE) print_index = history_index;
+    do
     {
-        printf("%d : %s", i+1, history[i]);
-    }
+        printf("%d : %s\n", i , history[print_index]);
+        ++print_index;
+        if(print_index == HISTORY_SIZE) print_index = 0;
+        ++i;
+    } while (history_index != print_index);
+        
 }
 
 void print_tokens(char **tokens)
