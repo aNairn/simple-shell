@@ -10,7 +10,6 @@ typedef struct Alias
 int run(char *user_in, char **history, int *history_len, int *history_index, Alias ***aliases, int *aliases_len);
 
 
-
 // SIMPLESHELL.c FUNCTIONS
 char *get_cwd();
 
@@ -58,6 +57,9 @@ void print_aliases(Alias **aliases);
 
 Alias **remove_alias(Alias **aliases, char *name);
 
+void save_aliases(Alias **aliases, int aliases_len);
+
+int read_aliases(Alias **aliases);
 
 // ERRORS
 void to_few_args_err();
@@ -84,6 +86,7 @@ void aliases_full_err();
 
 void no_alias_found_err();
 
+void file_error(char *file_name);
 
 // TESTING
 void testing_mode();

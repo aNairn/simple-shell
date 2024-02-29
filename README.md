@@ -91,12 +91,27 @@ Please update this file with anything you think needs done we can discuss stuff 
 - [x] if alias exists jsut replace it with the new one
 - [x] cap aliases at 10
 
-# ERRORS
+# Stage Seven Sprint
+
+- [ ] inform message when overwriting an alias
+- [ ] unalias with an empty alias list
+
+# Stage Eight
+
+- [x] create function for writing to a file
+- [x] write each alias to a line [one alias per line] <alias alias command>
+- [x] check the file has been created and matches post exit alias
+- [x] create function for reading from a file
+- [x] separate the aliase name from the command
+- [x] tokenise the command and crete the alias struct
+- [x] add all aliases to the alias list
+
+# ERRORS!
 - [x] fix empty alias to few args
 - [x] fix error with empty cd
 
 # FIXES
-- [ ] test file needs updated to be able to work with future features
+- [x] test file needs updated to be able to work with future features
 
   
 
