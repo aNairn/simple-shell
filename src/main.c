@@ -7,7 +7,7 @@
 #include "error.h"
 #include "tests.h"
 
-#define HISTORY_SIZE 20
+#define HISTORY_SIZE 5
 
 int main(void){
     char * starting_dir = get_cwd();
@@ -109,7 +109,7 @@ int main(void){
         else
         {
             // Add the current command to history
-            free(history[history_index]);
+            //free(history[history_index]);
             history[history_index] = strdup(user_in);
             history_index = (history_index + 1) % HISTORY_SIZE;
             history_len = (history_len < HISTORY_SIZE) ? history_len + 1 : HISTORY_SIZE;

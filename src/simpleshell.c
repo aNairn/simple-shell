@@ -235,9 +235,10 @@ int parseCommand(char * command)
 
 void print_history(char ** history, int history_len, int history_index, int HISTORY_SIZE)
 {
-    for(int i = 0; i < history_len; i++){
-        printf("%d : %s", history_len-i, history[(i + history_index) % HISTORY_SIZE]);
-    }
+    for (int i = 0; i < history_len; i++)
+        {
+            printf("%d : %s\n", i + 1 , history[(history_index + i) % HISTORY_SIZE]);
+        }
 }
 
 void print_tokens(char ** tokens)
