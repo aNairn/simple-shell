@@ -18,6 +18,7 @@ void testing_mode()
     {
         char **history = create_history_array();
         int history_len = 0;
+        int history_index = 0;
 
         struct Alias **aliases = create_alias_array();
         int aliases_len = 0;
@@ -75,7 +76,7 @@ void testing_mode()
             printf("\n");
             user_in = tests[i];
             
-            if(run(user_in, history, &history_len, &aliases, &aliases_len)) break;
+            if(run(user_in, history, &history_len, &history_index, &aliases, &aliases_len)) break;
 
             printf("-----------------------------\n");
             printf("<<< ------ SUCCESS ------ >>>\n\n");
