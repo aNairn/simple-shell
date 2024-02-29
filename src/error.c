@@ -5,8 +5,7 @@
 #include <sys/wait.h>
 #include <sys/stat.h>
 
-#include "error.h" 
-#include "tests.h"
+#include "simpleshell.h" 
 
 #define INPUT_LIMIT 512
 
@@ -72,4 +71,14 @@ void parsing_int_error()
 void value_out_of_bounds_error()
 {
     perror("<Value entered out of range>");
+}
+
+void aliases_full_err()
+{
+    perror("<Aliases Full : Try removing unwanted aliases>");
+}
+
+void no_alias_found_err()
+{
+    perror("<No Alias Found>");
 }

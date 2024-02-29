@@ -2,6 +2,8 @@
     "files.associations": {
         "simpleshell.h": "c",
         "stdio.h": "c",
-        "error.h": "c"
+        "error.h": "c",
+        "typeinfo": "c",
+        "tests.h": "c"
     }
 }
