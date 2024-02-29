@@ -54,7 +54,7 @@ Please update this file with anything you think needs done we can discuss stuff 
 - [x] Create a list of Strings to hold the commands entered during runtime
 - [x] Each time a command is ran add it to the History array
 - [x] Check for '!' being the first character
-- [ ] Invoke command from history
+- [x] Invoke command from history
         - [x] !! ==> print last command
         - [x] !1 ==> print first command
         - [x] !-1 ==> print first command 
@@ -62,7 +62,7 @@ Please update this file with anything you think needs done we can discuss stuff 
 - [x] Treat 0 of the array as 1 and run the command at the index entered 
         - [x] '!-1' ==> run the 0th command
         - [x] '!-4' ==> run the 3rd command
-- [ ] Pick a method of handling a full array
+- [x] Pick a method of handling a full array
         - circular array?
         - shift all elements to the left 1-2-3 becomes 0-1-2?
         - reallocate array to increase size?
