@@ -167,6 +167,7 @@ int run(char *user_in, char **history, int *history_len, int *history_index, Ali
                 if((existing_alias = alias_exists(*aliases, name)))
                 {
                     existing_alias->command_tokens = command;
+                    alias_override_msg(name);
                     return 0;
                 }
 

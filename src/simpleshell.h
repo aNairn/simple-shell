@@ -88,6 +88,9 @@ void no_alias_found_err();
 
 void file_error(char *file_name);
 
+//MESSAGES  
+void alias_override_msg(char *name);
+
 // TESTING
 void testing_mode();
 
