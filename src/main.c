@@ -5,6 +5,7 @@
 
 #include "simpleshell.h"
 
+#define HISTORY_SIZE 20
 void splash_screen(){
     printf("-------------------------------------------------------------------------------------\n---                                888             888888            _.---._      ---\n--                                 888             888888        __.'"".'/|\\`.""'.__   --\n--                                 888             888888       :__.' / | \\ `.__:  --\n-- .d8888b  .d88b.  8888b. .d8888b 88888b.  .d88b. 888888       '.'  /  |  \\  `.'  --\n-- 88K     d8P  Y8b    \"88b88K     888 \"88bd8P  Y8b888888        `. /   |   \\ .'   --\n-- \"Y8888b.88888888.d888888\"Y8888b.888  88888888888888888          `-.__|__.-'     --\n--      X88Y8b.    888  888     X88888  888Y8b.    888888                          --\n--- 88888P' \"Y8888 \"Y888888 88888P'888  888 \"Y8888 888888                         ---\n-------------------------------------------------------------------------------------\n\n");
 }
@@ -18,6 +19,8 @@ int main(void)
 
     char **history = create_history_array();
     int history_len = 0;
+    int history_index = 0;
+
 
     struct Alias **aliases = create_alias_array();
     int aliases_len = 0;
@@ -34,7 +37,7 @@ int main(void)
         char *user_in;
         user_in = get_users_input();
 
-        if(run(user_in, history, &history_len, &aliases, &aliases_len)) break;
+        if(run(user_in, history, &history_len, &history_index, &aliases, &aliases_len)) break;
 
     }
 
@@ -44,7 +47,7 @@ int main(void)
     return 0;
 }
 
-int run(char *user_in, char **history, int *history_len, Alias ***aliases, int *aliases_len)
+int run(char *user_in, char **history, int *history_len, int *history_index, Alias ***aliases, int *aliases_len)
 {
         char **tokens;
         
@@ -88,7 +91,7 @@ int run(char *user_in, char **history, int *history_len, Alias ***aliases, int *
                 }
                 else
                 {
-                    tokens = get_tokens(strdup(history[*history_len - 1]));
+                    tokens = get_tokens(strdup(history[(*history_index - 1 + HISTORY_SIZE) % HISTORY_SIZE]));
                 }
             }
             else
@@ -98,14 +101,15 @@ int run(char *user_in, char **history, int *history_len, Alias ***aliases, int *
                     command++;
                 }
 
-                int history_index = parseCommand(command);
-                if (history_index < 0)
+                int history_value = parseCommand(command);
+
+                if (history_value < 0)
                 {
                     parsing_int_error();
                     free(tokens);
                     return 0;
                 }
-                else if (history_index < 1 || history_index > 20)
+                else if(history_value < 1 || history_value > HISTORY_SIZE || history_value>*history_len)
                 {
                     value_out_of_bounds_error();
                     free(tokens);
@@ -113,7 +117,7 @@ int run(char *user_in, char **history, int *history_len, Alias ***aliases, int *
                 }
                 else
                 {
-                    tokens = get_tokens(strdup(history[*history_len - history_index]));
+                    tokens = get_tokens(strdup(history[(*history_index - history_value + *history_len) % *history_len]));
                 }
             }
         }
@@ -125,8 +129,10 @@ int run(char *user_in, char **history, int *history_len, Alias ***aliases, int *
         }
         else
         {
-            history[*history_len] = strdup(user_in);
-            ++*history_len;
+            // Add the current command to history
+            history[*history_index] = strdup(user_in);
+            *history_index = (*history_index + 1) % HISTORY_SIZE;
+            *history_len = (*history_len < HISTORY_SIZE) ? *history_len + 1 : HISTORY_SIZE;
         }
 
         // ====== CHECKING ALIASES ========
@@ -149,6 +155,7 @@ int run(char *user_in, char **history, int *history_len, Alias ***aliases, int *
                 char *name = *(tokens + 1);
                 char **command = tokens + 2;
 
+                // Make sure tokens are valid
                 if (*command == NULL)
                 {
                     to_few_args_err();
@@ -170,6 +177,7 @@ int run(char *user_in, char **history, int *history_len, Alias ***aliases, int *
                 }
                 return 0;
             }
+        
         }
         else if (!strcmp(*tokens, "unalias"))
         {
@@ -238,15 +246,16 @@ int run(char *user_in, char **history, int *history_len, Alias ***aliases, int *
         {
             print_path();
         }
-        else if (!strcmp(*tokens, "history"))
+        else if(!strcmp(*tokens, "history"))
         {
-            print_history(history, *history_len);
+            print_history(history, *history_len, *history_index, HISTORY_SIZE);
         }
-        else
+        else 
         {
             run_fork(tokens);
         }
         
         free(tokens);
-        return 0;
+    return 0;
+    
 }

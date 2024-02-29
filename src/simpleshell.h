@@ -7,7 +7,7 @@ typedef struct Alias
 } Alias;
 
 // MAIN.c FUNCTIONS
-int run(char *user_in, char **history, int *history_len, Alias ***aliases, int *aliases_len);
+int run(char *user_in, char **history, int *history_len, int *history_index, Alias ***aliases, int *aliases_len);
 
 
 
@@ -38,7 +38,7 @@ int parseCommand(char *command);
 
 char **create_history_array();
 
-void print_history(char **history, int history_len);
+void print_history(char ** history, int history_len, int history_index, int HISTORY_SIZE);
 
 void print_tokens(char **tokens);
 
