@@ -7,7 +7,7 @@
 #include "error.h"
 #include "tests.h"
 
-#define HISTORY_SIZE 5
+#define HISTORY_SIZE 20
 
 int main(void){
     char * starting_dir = get_cwd();
