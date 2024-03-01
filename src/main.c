@@ -21,7 +21,7 @@ int main(void)
     char *starting_HOME = getenv("HOME");
 
     char **history = create_history_array();
-    int history_len = 0;
+    int history_len = read_history(history);
     int history_index = 0;
 
 
@@ -42,6 +42,7 @@ int main(void)
 
     reset_env(starting_dir, starting_HOME, starting_PATH);
     chdir(starting_HOME);
+    save_history(history, history_len, history_index);
     save_aliases(aliases, aliases_len);
     free(history);
 
@@ -250,7 +251,7 @@ int run(char *user_in, char **history, int *history_len, int *history_index, Ali
         }
         else if(!strcmp(*tokens, "history"))
         {
-            print_history(history, *history_len, *history_index, HISTORY_SIZE);
+            print_history(history, *history_len, *history_index);
         }
         else 
         {

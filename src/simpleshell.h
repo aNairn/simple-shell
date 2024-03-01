@@ -37,7 +37,11 @@ int parseCommand(char *command);
 
 char **create_history_array();
 
-void print_history(char ** history, int history_len, int history_index, int HISTORY_SIZE);
+void print_history(char ** history, int history_len, int history_index);
+
+void save_history(char **history, int history_len, int history_index);
+
+int read_history(char **history);
 
 void print_tokens(char **tokens);
 

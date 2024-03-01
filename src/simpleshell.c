@@ -12,6 +12,8 @@
 #define TOKEN_DELIM " \t\n|><&;"
 #define MAX_ALIASES 10
 #define ALIASES_FILENAME ".aliases"
+#define HISTORY_FILENAME ".history"
+#define HISTORY_SIZE 20
 
 // functions
 
@@ -252,7 +254,7 @@ char **create_history_array()
     return history;
 }
 
-void print_history(char ** history, int history_len, int history_index, int HISTORY_SIZE)
+void print_history(char ** history, int history_len, int history_index)
 {
     int print_index = 0;
     int i = 1;
@@ -265,6 +267,41 @@ void print_history(char ** history, int history_len, int history_index, int HIST
         ++i;
     } while (history_index != print_index);
         
+}
+
+void save_history(char **history, int history_len, int history_index){
+    FILE *file = fopen(HISTORY_FILENAME, "w");
+    if(file == NULL){
+        file_error(HISTORY_FILENAME);
+        return;
+    }
+
+    for(int i = 0; i < history_len; i++){
+        fprintf(file, "%s", history[history_index]);
+        history_index = (history_index + 1) % HISTORY_SIZE;
+    }
+    fclose(file);
+}
+
+int read_history(char **history){
+    int history_len = 0;
+
+    FILE *file = fopen(HISTORY_FILENAME, "r");
+    if(file == NULL){
+        return 0;
+    }
+
+    char line[BUFFER_SIZE];
+
+    while(fgets(line, sizeof(line), file) != NULL){
+        char *input_string = malloc(sizeof(char) * BUFFER_SIZE);
+        strcpy(input_string, line);
+
+        history[history_len % HISTORY_SIZE] = strdup(input_string);
+        history_len++;
+    }
+    fclose(file);
+    return history_len;
 }
 
 void print_tokens(char **tokens)
