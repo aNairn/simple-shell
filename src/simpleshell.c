@@ -261,7 +261,7 @@ void print_history(char ** history, int history_len, int history_index)
     if(history_len == HISTORY_SIZE) print_index = history_index;
     do
     {
-        printf("%d : %s\n", i , history[print_index]);
+        printf("%d : %s", i , history[print_index]);
         ++print_index;
         if(print_index == HISTORY_SIZE) print_index = 0;
         ++i;
@@ -286,6 +286,8 @@ void save_history(char **history, int history_len, int history_index){
 int read_history(char **history){
     int history_len = 0;
 
+    int history_index = 0;
+    
     FILE *file = fopen(HISTORY_FILENAME, "r");
     if(file == NULL){
         return 0;
@@ -297,9 +299,13 @@ int read_history(char **history){
         char *input_string = malloc(sizeof(char) * BUFFER_SIZE);
         strcpy(input_string, line);
 
-        history[history_len % HISTORY_SIZE] = strdup(input_string);
+        history[history_len] = strdup(input_string);
         history_len++;
+        history_index++;
+        if(history_index == HISTORY_SIZE) history_index = 0;
     }
+    print_history(history, history_len, history_index);
+    printf("len : %d -> ind : %d\n", history_len, history_index);
     fclose(file);
     return history_len;
 }
