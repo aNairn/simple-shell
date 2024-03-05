@@ -310,7 +310,7 @@ int read_history(char **history){
     while(fgets(line, sizeof(line), file) != NULL){
         char *input_string = malloc(sizeof(char) * BUFFER_SIZE);
         strcpy(input_string, line);
-        printf("%s\n", input_string);
+        //printf("%s\n", input_string);
         history[history_len] = strdup(input_string);
         history_len++;
         history_index++;
