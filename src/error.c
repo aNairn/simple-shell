@@ -85,24 +85,10 @@ void no_alias_found_err()
 
 void alias_override_msg(char *name)
 {
-     char *msg_head = "<Alias '";
-     char *msg_tail = "' updated>";
-     char *msg = malloc(strlen(msg_head) + strlen(name) + strlen(msg_tail));
-     strcat(msg, msg_head);
-     strcat(msg, name);
-     strcat(msg, msg_tail);
-     perror(msg);
+    printf("<Alias '%s' updated>\n", name);
 }   
 
 void file_error(char *file_name)
 {
-    char *msg_frag = "<Error opening file ";
-    int msg_len = strlen(msg_frag)+strlen(file_name)+3;
-    char *msg = malloc(msg_len);
-    strcat(msg, msg_frag);
-    strcat(msg, "'");
-    strcat(msg, file_name);
-    strcat(msg, "'");
-    strcat(msg, ">");
-    perror(msg);
+    printf("<Error opening file '%s'>", file_name);
 }

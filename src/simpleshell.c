@@ -339,16 +339,15 @@ Alias **create_alias_array()
     return aliases;
 }
 
-Alias *alias_exists(Alias **aliases, char *name)
+Alias *alias_exists(Alias **aliases, char *name, int aliases_len)
 {
-    while (*aliases)
-    {
-        Alias *alias = *aliases;
+
+    for(int i = 0; i < aliases_len; i++){
+        Alias *alias = aliases[i];
         if (!strcmp(alias->name, name))
         {
-            return alias;
+           return alias;
         }
-        ++aliases;
     }
     return NULL;
 }
@@ -445,18 +444,21 @@ char **fetch_alias(char **tokens, char **alias_command)
 {
     char **new_tokens = malloc(sizeof(tokens) + sizeof(alias_command));
     int i = 0;
-    while (*alias_command)
+    while (alias_command[i])
     {
-        new_tokens[i] = *alias_command;
-        ++alias_command;
+        new_tokens[i] = alias_command[i];
         ++i;
     }
-    while (*tokens)
-    {
-        new_tokens[i] = *tokens;
-        ++tokens;
-        ++i;
+    int k = 0;
+    if(tokens[k]){
+        while (tokens[i])
+        {
+            new_tokens[i] = tokens[k];
+            ++i;
+            ++k;
+        }
     }
+    new_tokens[i] = NULL;
     return new_tokens;
 }
 
@@ -467,11 +469,11 @@ char **get_alias_command(Alias *alias, char **tokens)
     return fetch_alias(tokens, command);
 }
 
-void print_aliases(Alias **aliases)
+void print_aliases(Alias **aliases, int aliases_len)
 {
-    while (*aliases != NULL)
+    for (int i = 0; i < aliases_len; i++)
     {
-        Alias *alias = *aliases;
+        Alias *alias = aliases[i];
         printf("{ %s : \" ", alias->name);
         char **tokens = alias->command_tokens;
         while (*tokens != NULL)
@@ -480,8 +482,8 @@ void print_aliases(Alias **aliases)
             ++tokens;
         }
         printf("\" }\n");
-        aliases++;
     }
+    
 }
 
 Alias **remove_alias(Alias **aliases, char *name)
@@ -494,12 +496,11 @@ Alias **remove_alias(Alias **aliases, char *name)
         if (!strcmp(alias->name, name))
         {
             ++aliases;
-            continue;
+        }else{
+            new_aliases_list[i] = alias;
+            i++;
+            ++aliases;
         }
-        new_aliases_list[i] = alias;
-        i++;
-        ++aliases;
     }
-    // free(aliases);
     return new_aliases_list;
 }
