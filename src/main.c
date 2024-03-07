@@ -20,13 +20,16 @@ int main(void)
     char *starting_PATH = getenv("PATH");
     char *starting_HOME = getenv("HOME");
 
-    char **history = create_history_array();
-    int history_len = 0;
-    int history_index = 0;
-
 
     struct Alias **aliases = create_alias_array();
     int aliases_len = read_aliases(aliases);
+    
+    char **history = create_history_array();
+    int history_len = read_history(history);
+    int history_index = 0;
+    if(history_len < HISTORY_SIZE)
+        history_index = history_len;
+    
 
     while (1)
     {
@@ -42,7 +45,9 @@ int main(void)
 
     reset_env(starting_dir, starting_HOME, starting_PATH);
     chdir(starting_HOME);
+    save_history(history, history_len, history_index);
     save_aliases(aliases, aliases_len);
+    free(aliases);
     free(history);
 
     return 0;
@@ -138,16 +143,17 @@ int run(char *user_in, char **history, int *history_len, int *history_index, Ali
 
         // ====== CHECKING ALIASES ========
         Alias * existing_alias;
-        if((existing_alias = alias_exists(*aliases, *tokens)))
+
+        if((existing_alias = alias_exists(*aliases, *tokens, *aliases_len)))
         {
             tokens = get_alias_command(existing_alias, tokens);
         }
-
         if (!strcmp(*tokens, "alias"))
         {
+
             if (*(tokens + 1) == NULL)
             {
-                print_aliases(*aliases);
+                print_aliases(*aliases, *aliases_len);
                 free(tokens);
                 return 0;
             }
@@ -164,7 +170,7 @@ int run(char *user_in, char **history, int *history_len, int *history_index, Ali
                 }
 
                 Alias *existing_alias;
-                if((existing_alias = alias_exists(*aliases, name)))
+                if((existing_alias = alias_exists(*aliases, name, *aliases_len)))
                 {
                     existing_alias->command_tokens = command;
                     alias_override_msg(name);
@@ -195,7 +201,7 @@ int run(char *user_in, char **history, int *history_len, int *history_index, Ali
                 return 0;
             }
             char *name = *tokens;
-            if(alias_exists(*aliases, name))
+            if(alias_exists(*aliases, name, *aliases_len))
             {
                 *aliases = remove_alias(*aliases, name);
                 --*aliases_len;
@@ -250,7 +256,7 @@ int run(char *user_in, char **history, int *history_len, int *history_index, Ali
         }
         else if(!strcmp(*tokens, "history"))
         {
-            print_history(history, *history_len, *history_index, HISTORY_SIZE);
+            print_history(history, *history_len, *history_index);
         }
         else 
         {

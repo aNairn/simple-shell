@@ -10,8 +10,10 @@
 #define BUFFER_SIZE 1024
 #define INPUT_LIMIT 512
 #define TOKEN_DELIM " \t\n|><&;"
+#define HISTORY_SIZE 20
 #define MAX_ALIASES 10
 #define ALIASES_FILENAME ".aliases"
+#define HISTORY_FILENAME ".history"
 
 // functions
 
@@ -236,7 +238,7 @@ int parseCommand(char *command)
     else
     {
         history_value = ((*command) - 48) * 10;
-        history_value += ((*(command+1)) - 48);
+        history_value += ((*(command + 1)) - 48);
     }
 
     return history_value;
@@ -252,19 +254,70 @@ char **create_history_array()
     return history;
 }
 
-void print_history(char ** history, int history_len, int history_index, int HISTORY_SIZE)
+void print_history(char **history, int history_len, int history_index)
 {
     int print_index = 0;
     int i = 1;
-    if(history_len == HISTORY_SIZE) print_index = history_index;
+    if (history_len == HISTORY_SIZE)
+        print_index = history_index;
     do
     {
-        printf("%d : %s\n", i , history[print_index]);
+        printf("%d : %s", i, history[print_index]);
         ++print_index;
-        if(print_index == HISTORY_SIZE) print_index = 0;
+        if (print_index == HISTORY_SIZE)
+            print_index = 0;
         ++i;
     } while (history_index != print_index);
-        
+}
+
+void save_history(char **history, int history_len, int history_index)
+{
+    FILE *file = fopen(HISTORY_FILENAME, "w");
+    if (file == NULL)
+    {
+        file_error(HISTORY_FILENAME);
+        return;
+    }
+
+    int save_index = 0;
+    int i = 1;
+    if (history_len == HISTORY_SIZE)
+        save_index = history_index;
+    do
+    {
+        fprintf(file, "%s", history[save_index]);
+        ++save_index;
+        if (save_index == HISTORY_SIZE)
+            save_index = 0;
+        ++i;
+    } while (history_index != save_index);
+
+    fclose(file);
+}
+
+int read_history(char **history){
+
+    int history_len = 0;
+    int history_index = 0;
+
+    FILE *file = fopen(HISTORY_FILENAME, "r");
+    if(file == NULL){
+        return 0;
+    }
+
+    char line[BUFFER_SIZE];
+
+    while(fgets(line, sizeof(line), file) != NULL){
+        char *input_string = malloc(sizeof(char) * BUFFER_SIZE);
+        strcpy(input_string, line);
+        //printf("%s\n", input_string);
+        history[history_len] = strdup(input_string);
+        history_len++;
+        history_index++;
+        if(history_index == HISTORY_SIZE) history_index = 0;
+    }
+    fclose(file);
+    return history_len;
 }
 
 void print_tokens(char **tokens)
@@ -286,16 +339,15 @@ Alias **create_alias_array()
     return aliases;
 }
 
-Alias *alias_exists(Alias **aliases, char *name)
+Alias *alias_exists(Alias **aliases, char *name, int aliases_len)
 {
-    while (*aliases)
-    {
-        Alias *alias = *aliases;
+
+    for(int i = 0; i < aliases_len; i++){
+        Alias *alias = aliases[i];
         if (!strcmp(alias->name, name))
         {
-            return alias;
+           return alias;
         }
-        ++aliases;
     }
     return NULL;
 }
@@ -313,7 +365,8 @@ void save_aliases(Alias **aliases, int aliases_len)
 {
     FILE *file;
     file = fopen(ALIASES_FILENAME, "w");
-    if (file == NULL) {
+    if (file == NULL)
+    {
         file_error(ALIASES_FILENAME);
         return;
     }
@@ -321,16 +374,18 @@ void save_aliases(Alias **aliases, int aliases_len)
     {
         int len = strlen(aliases[i]->name);
         char **alias_command = aliases[i]->command_tokens;
-        while(*alias_command){
-            len+=strlen(*alias_command)+1;
+        while (*alias_command)
+        {
+            len += strlen(*alias_command) + 1;
             ++alias_command;
         }
-        char * alias_value = malloc(len);
+        char *alias_value = malloc(len);
 
         alias_command = aliases[i]->command_tokens;
         strcpy(alias_value, aliases[i]->name);
         strcat(alias_value, " ");
-        while(*alias_command){
+        while (*alias_command)
+        {
             strcat(alias_value, *alias_command);
             strcat(alias_value, " ");
             ++alias_command;
@@ -347,22 +402,23 @@ int read_aliases(Alias **aliases)
     int aliases_len = 0;
 
     FILE *file = fopen(ALIASES_FILENAME, "r");
-    if (file == NULL) {
+    if (file == NULL)
+    {
         file_error(ALIASES_FILENAME);
         return 0;
     }
     char line[150];
 
-    while(fgets(line, sizeof(line), file) != NULL)
+    while (fgets(line, sizeof(line), file) != NULL)
     {
-        char *input_string = malloc(sizeof(char)*150);
+        char *input_string = malloc(sizeof(char) * 150);
         strcpy(input_string, line);
         char **input_tokens = get_tokens(input_string);
         char *name = *input_tokens;
         ++input_tokens;
-        
+
         Alias *input_alias = create_alias(name, input_tokens);
-        aliases_len+=add_alias(aliases, input_alias, aliases_len);
+        aliases_len += add_alias(aliases, input_alias, aliases_len);
     }
     return aliases_len;
 }
@@ -388,18 +444,21 @@ char **fetch_alias(char **tokens, char **alias_command)
 {
     char **new_tokens = malloc(sizeof(tokens) + sizeof(alias_command));
     int i = 0;
-    while (*alias_command)
+    while (alias_command[i])
     {
-        new_tokens[i] = *alias_command;
-        ++alias_command;
+        new_tokens[i] = alias_command[i];
         ++i;
     }
-    while (*tokens)
-    {
-        new_tokens[i] = *tokens;
-        ++tokens;
-        ++i;
+    int k = 0;
+    if(tokens[k]){
+        while (tokens[i])
+        {
+            new_tokens[i] = tokens[k];
+            ++i;
+            ++k;
+        }
     }
+    new_tokens[i] = NULL;
     return new_tokens;
 }
 
@@ -410,11 +469,11 @@ char **get_alias_command(Alias *alias, char **tokens)
     return fetch_alias(tokens, command);
 }
 
-void print_aliases(Alias **aliases)
+void print_aliases(Alias **aliases, int aliases_len)
 {
-    while (*aliases != NULL)
+    for (int i = 0; i < aliases_len; i++)
     {
-        Alias *alias = *aliases;
+        Alias *alias = aliases[i];
         printf("{ %s : \" ", alias->name);
         char **tokens = alias->command_tokens;
         while (*tokens != NULL)
@@ -423,26 +482,25 @@ void print_aliases(Alias **aliases)
             ++tokens;
         }
         printf("\" }\n");
-        aliases++;
     }
+    
 }
 
 Alias **remove_alias(Alias **aliases, char *name)
 {
     Alias **new_aliases_list = create_alias_array();
     int i = 0;
-    while(*aliases)
+    while (*aliases)
     {
         Alias *alias = *aliases;
-        if(!strcmp(alias->name, name))
+        if (!strcmp(alias->name, name))
         {
             ++aliases;
-            continue;
+        }else{
+            new_aliases_list[i] = alias;
+            i++;
+            ++aliases;
         }
-        new_aliases_list[i] = alias;
-        i++;
-        ++aliases;
     }
-    // free(aliases);
     return new_aliases_list;
 }

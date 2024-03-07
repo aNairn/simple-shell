@@ -37,13 +37,17 @@ int parseCommand(char *command);
 
 char **create_history_array();
 
-void print_history(char ** history, int history_len, int history_index, int HISTORY_SIZE);
+void print_history(char ** history, int history_len, int history_index);
+
+void save_history(char **history, int history_len, int history_index);
+
+int read_history(char **history);
 
 void print_tokens(char **tokens);
 
 Alias **create_alias_array();
 
-Alias *alias_exists(Alias **aliases, char *name);
+Alias *alias_exists(Alias **aliases, char *name, int aliases_len);
 
 Alias *create_alias(char *name, char **tokens);
 
@@ -53,7 +57,7 @@ char **fetch_alias(char **tokens, char **alias_command);
 
 char **get_alias_command(Alias *alias, char **tokens);
 
-void print_aliases(Alias **aliases);
+void print_aliases(Alias **aliases, int aliases_len);
 
 Alias **remove_alias(Alias **aliases, char *name);
 
