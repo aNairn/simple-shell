@@ -74,8 +74,8 @@ int run(char *user_in, char **history, int *history_len, int *history_index, Ali
     // untill nothing to change
 
     // ====== CHECKING ALIASES ========
-    int check_done = 0;
-    char **checked = malloc(5 * sizeof(char *));
+    // int check_done = 0;
+    // char **checked = malloc(5 * sizeof(char *));
     int check_num = 0;
     do
     {
@@ -83,14 +83,14 @@ int run(char *user_in, char **history, int *history_len, int *history_index, Ali
 
         if ((existing_alias = alias_exists(*aliases, *tokens, *aliases_len)))
         {
-            for(int i = 0; i <= check_num; i++){
-                if(!strcmp(checked[i], existing_alias->name)){
-                    printf("<Alias loop detected breaking>");
-                    check_done = 1;
-                    break;
-                }
-            }
-            checked[check_num] = existing_alias->name;
+            // for(int i = 0; i <= check_num; i++){
+            //     if(!strcmp(checked[i], existing_alias->name)){
+            //         printf("<Alias loop detected breaking>");
+            //         check_done = 1;
+            //         break;
+            //     }
+            // }
+            // checked[check_num] = existing_alias->name;
             tokens = get_alias_command(existing_alias, tokens);
         }
         if (!strcmp(*tokens, "alias"))
@@ -156,7 +156,8 @@ int run(char *user_in, char **history, int *history_len, int *history_index, Ali
         }
         ++check_num;
 
-    } while (!check_done && check_num < 5);
+    // } while (!check_done && check_num < 5);
+    } while (check_num < 10);
     
 
     // ====== CHECKING HISTORY ========
