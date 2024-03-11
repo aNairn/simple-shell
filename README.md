@@ -1,3 +1,7 @@
+# Compiling
+
+run ./compile.txt to compile project
+
 # Purpose
 
 Use this file to breakdown tasks and track progess.

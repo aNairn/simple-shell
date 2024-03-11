@@ -1,4 +1,14 @@
 
+#define BUFFER_SIZE 1024
+#define INPUT_LIMIT 512
+#define TOKEN_DELIM " \t\n|><&;"
+
+#define HISTORY_SIZE 20
+#define HISTORY_FILENAME ".history"
+
+#define MAX_ALIASES 10
+#define ALIASES_FILENAME ".aliases"
+
 // STRUCT
 typedef struct Alias
 {
@@ -31,9 +41,13 @@ void print_path();
 
 void run_fork(char **tokens);
 
+void print_tokens(char **tokens);
+
 void reset_env(char *starting_dir, char *starting_HOME, char *starting_PATH);
 
 int parseCommand(char *command);
+
+// History.c
 
 char **create_history_array();
 
@@ -43,7 +57,11 @@ void save_history(char **history, int history_len, int history_index);
 
 int read_history(char **history);
 
-void print_tokens(char **tokens);
+
+
+// void add_to_history(char **history, int *history_index, int *history_len, char *user_in);
+
+// aliases.c
 
 Alias **create_alias_array();
 
@@ -65,7 +83,7 @@ void save_aliases(Alias **aliases, int aliases_len);
 
 int read_aliases(Alias **aliases);
 
-// ERRORS
+// ERRORS.c
 void to_few_args_err();
 
 void input_too_long_error();

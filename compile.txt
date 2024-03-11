@@ -1,0 +1,1 @@
+gcc -pedantic src/main.c src/simpleshell.c src/aliases.c src/history.c src/error.c src/testing/tests.c -o run/SimpleShell
