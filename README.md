@@ -74,12 +74,12 @@ Please update this file with anything you think needs done we can discuss stuff 
 - [x] If command found in history it should be ran like any other command but there should be no history check 
 
 # Stage Six
-- [ ] Create a new file to save the history to
+- [x] Create a new file to save the history to
         - might need to save positions if doing circular array.
-- [ ] Save a history command per line of the txt file to make it easier to read back in
-- [ ] Read history from the file
-- [ ] Save history to the history array with all the corrct pointers
-- [ ] Make sure the history stays in the same order between instances
+- [x] Save a history command per line of the txt file to make it easier to read back in
+- [x] Read history from the file
+- [x] Save history to the history array with all the corrct pointers
+- [x] Make sure the history stays in the same order between instances
 
 # Stage Seven
 
@@ -97,8 +97,8 @@ Please update this file with anything you think needs done we can discuss stuff 
 
 # Stage Seven Sprint
 
-- [ ] inform message when overwriting an alias
-- [ ] unalias with an empty alias list
+- [x] inform message when overwriting an alias
+- [x] unalias with an empty alias list
 
 # Stage Eight
 
@@ -110,9 +110,17 @@ Please update this file with anything you think needs done we can discuss stuff 
 - [x] tokenise the command and crete the alias struct
 - [x] add all aliases to the alias list
 
+# Stage Nine
+
+- [x] create a loop for checking aliases
+- [x] create the function for checking an alias after an alias has been checked
+- [x] allow aliases to be created to work with history calls
+- [x] have a limit on alias checks to avoid loops
+
 # ERRORS!
 - [x] fix empty alias to few args
 - [x] fix error with empty cd
+- [ ] fix error with ctr-D causing segment fault
 
 # FIXES
 - [x] test file needs updated to be able to work with future features

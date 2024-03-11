@@ -27,6 +27,10 @@ int input_is_valid(char * input)
         printf("\n");
         return -1;
     }
+    else if(*input == '\n') 
+    {
+        return 0;
+    }
     else if(strlen(input) > INPUT_LIMIT)
     {
         input_too_long_error();

@@ -31,7 +31,9 @@ int main(void)
     if (history_len < HISTORY_SIZE)
         history_index = history_len;
 
-    while (1)
+    int running = 1;
+
+    do
     {
         char *cwd = get_cwd();
         display_prompt(cwd);
@@ -39,11 +41,19 @@ int main(void)
         char *user_in;
         user_in = get_users_input();
         
-        if(*user_in == '\n') continue;
-
-        if (run(user_in, history, &history_len, &history_index, &aliases, &aliases_len))
-            break;
-    }
+        int valid_input = input_is_valid(user_in);
+        if (valid_input == -1)
+        {
+            running = 0;
+        }
+        else if (valid_input == 0)
+        {
+            continue;
+        }else{
+            if (run(user_in, history, &history_len, &history_index, &aliases, &aliases_len))
+                running = 0;
+        }
+    }while(running);
 
     reset_env(starting_dir, starting_HOME, starting_PATH);
     chdir(starting_HOME);
@@ -58,16 +68,6 @@ int main(void)
 int run(char *user_in, char **history, int *history_len, int *history_index, Alias ***aliases, int *aliases_len)
 {
     char **tokens;
-
-    int valid_input = input_is_valid(user_in);
-    if (valid_input == -1)
-    {
-        return 1;
-    }
-    else if (valid_input == 0)
-    {
-        return 0;
-    }
 
     tokens = get_tokens(strdup(user_in));
     // need to somehow loop here in order to constantly update the tokens
