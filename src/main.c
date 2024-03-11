@@ -38,6 +38,8 @@ int main(void)
 
         char *user_in;
         user_in = get_users_input();
+        
+        if(*user_in == '\n') continue;
 
         if (run(user_in, history, &history_len, &history_index, &aliases, &aliases_len))
             break;
@@ -68,7 +70,6 @@ int run(char *user_in, char **history, int *history_len, int *history_index, Ali
     }
 
     tokens = get_tokens(strdup(user_in));
-
     // need to somehow loop here in order to constantly update the tokens
     // untill nothing to change
 
@@ -157,6 +158,7 @@ int run(char *user_in, char **history, int *history_len, int *history_index, Ali
 
     } while (!check_done && check_num < 5);
     
+
     // ====== CHECKING HISTORY ========
     if (*tokens == NULL)
     {
@@ -194,9 +196,8 @@ int run(char *user_in, char **history, int *history_len, int *history_index, Ali
             {
                 command++;
             }
-
             int history_value = parseCommand(command);
-
+            // printf("val : %d\n", history_value);
             if (history_value < 0)
             {
                 parsing_int_error();

@@ -92,6 +92,11 @@ int read_aliases(Alias **aliases)
     {
         char *input_string = malloc(sizeof(char) * 150);
         strcpy(input_string, line);
+        char *terminator = input_string;
+        while(*terminator != ' ')
+            terminator++;
+        terminator = '\0';
+
         char **input_tokens = get_tokens(input_string);
         char *name = *input_tokens;
         ++input_tokens;

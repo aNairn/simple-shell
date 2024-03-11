@@ -199,7 +199,8 @@ void reset_env(char *starting_dir, char *starting_HOME, char *starting_PATH)
 
 int parseCommand(char *command)
 {
-    if (*(command + 2))
+    int size = strlen(command);
+    if (size>2)
     {
         return -1;
     }
