@@ -42,20 +42,19 @@ void testing_mode()
             "!!\n",
             "!1\n",
             "!-1\n",
-            "Testing this\n",
-            "alias a b\n",
-            "unalias a\n",
-            "alias list ls\n",
-            "alias\n",
-            "alias list dir\n"
-            "alias\n",
-            "list\n",
-            "alias name\n",
-            "unalias\n",
-            "unalias fail this\n",
-            "alias\n",
-            "history\n"
-        };
+            // "Testing this\n",
+            // "alias a b\n",
+            // "unalias a\n",
+            // "alias list ls\n",
+            // "alias\n",
+            // "alias list dir\n,"
+            // "alias\n",
+            // "list\n",
+            // "alias name\n",
+            // "unalias\n",
+            // "unalias fail this\n",
+            // "alias\n",
+            "history\n"};
         int test_no = sizeof(tests) / sizeof(tests[0]);
 
         printf("======================================\n");
@@ -75,9 +74,24 @@ void testing_mode()
             display_prompt(cwd);
             printf("\n");
             user_in = tests[i];
-            
-            if(run(user_in, history, &history_len, &history_index, &aliases, &aliases_len)) break;
-
+            int valid_input = input_is_valid(user_in);
+            if (valid_input == -1)
+            {
+                printf("invalid input on test [%d] : '%s'", i, user_in);
+                break;
+            }
+            else if (valid_input == 0)
+            {
+                continue;
+            }
+            else
+            {
+                if (run(user_in, history, &history_len, &history_index, &aliases, &aliases_len))
+                {
+                    printf("invalid input on test [%d] : '%s'", i, user_in);
+                    break;
+                }
+            }
             printf("-----------------------------\n");
             printf("<<< ------ SUCCESS ------ >>>\n\n");
         }

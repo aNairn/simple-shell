@@ -40,7 +40,7 @@ int main(void)
 
         char *user_in;
         user_in = get_users_input();
-        
+
         int valid_input = input_is_valid(user_in);
         if (valid_input == -1)
         {
@@ -49,11 +49,13 @@ int main(void)
         else if (valid_input == 0)
         {
             continue;
-        }else{
+        }
+        else
+        {
             if (run(user_in, history, &history_len, &history_index, &aliases, &aliases_len))
                 running = 0;
         }
-    }while(running);
+    } while (running);
 
     reset_env(starting_dir, starting_HOME, starting_PATH);
     chdir(starting_HOME);
@@ -145,8 +147,11 @@ int run(char *user_in, char **history, int *history_len, int *history_index, Ali
             char *name = *tokens;
             if (alias_exists(*aliases, name, *aliases_len))
             {
-                *aliases = remove_alias(*aliases, name);
-                --*aliases_len;
+                printf("alias len : %d\n", *aliases_len);
+
+                *aliases = remove_alias(*aliases, name, aliases_len);
+                (*aliases_len)--;
+                printf("alias len : %d\n", *aliases_len);
             }
             else
             {
@@ -156,9 +161,8 @@ int run(char *user_in, char **history, int *history_len, int *history_index, Ali
         }
         ++check_num;
 
-    // } while (!check_done && check_num < 5);
+        // } while (!check_done && check_num < 5);
     } while (check_num < 10);
-    
 
     // ====== CHECKING HISTORY ========
     if (*tokens == NULL)
@@ -193,12 +197,14 @@ int run(char *user_in, char **history, int *history_len, int *history_index, Ali
         }
         else
         {
+            int latest = 0;
             if (*command == '-')
             {
-                command++;
+                command++; 
+                latest = 1;           
             }
-            int history_value = parseCommand(command);
-            // printf("val : %d\n", history_value);
+            int history_value = indexFromCommand(command);
+
             if (history_value < 0)
             {
                 parsing_int_error();
@@ -213,7 +219,10 @@ int run(char *user_in, char **history, int *history_len, int *history_index, Ali
             }
             else
             {
-                tokens = get_tokens(strdup(history[(*history_index - history_value + *history_len) % *history_len]));
+                if(!latest)
+                    tokens = get_tokens(strdup(history[(history_value + *history_len) % *history_len]));
+                else
+                    tokens = get_tokens(strdup(history[(*history_index - history_value + *history_len) % *history_len]));
             }
         }
     }

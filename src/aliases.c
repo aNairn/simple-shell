@@ -170,22 +170,38 @@ void print_aliases(Alias **aliases, int aliases_len)
     
 }
 
-Alias **remove_alias(Alias **aliases, char *name)
+Alias **remove_alias(Alias **aliases, char *name, int *aliases_len)
 {
-    Alias **new_aliases_list = create_alias_array();
-    int i = 0;
-    while (*aliases)
+    // Alias **new_aliases_list = create_alias_array();
+    // int i = 0;
+    // while (*aliases)
+    // {
+    //     Alias *alias = *aliases;
+    //     if (!strcmp(alias->name, name))
+    //     {
+    //         ++aliases;
+    //     }else{
+    //         new_aliases_list[i] = alias;
+    //         i++;
+    //         ++aliases;
+    //     }
+    // }
+    // return new_aliases_list;
+    for(int i = 0; i < *aliases_len; i++)
     {
-        Alias *alias = *aliases;
+        Alias *alias = aliases[i];
         if (!strcmp(alias->name, name))
         {
-            ++aliases;
-        }else{
-            new_aliases_list[i] = alias;
-            i++;
-            ++aliases;
+            for(i; i < *aliases_len; i++)
+            {
+                if(aliases[i])
+                {
+                    printf("here\n");
+                    aliases[i] = aliases[i+1];
+                }
+            }
         }
     }
-    return new_aliases_list;
+    return aliases;
 }
 

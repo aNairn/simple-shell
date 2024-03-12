@@ -45,7 +45,7 @@ void print_tokens(char **tokens);
 
 void reset_env(char *starting_dir, char *starting_HOME, char *starting_PATH);
 
-int parseCommand(char *command);
+int indexFromCommand(char *command);
 
 // History.c
 
@@ -77,7 +77,7 @@ char **get_alias_command(Alias *alias, char **tokens);
 
 void print_aliases(Alias **aliases, int aliases_len);
 
-Alias **remove_alias(Alias **aliases, char *name);
+Alias **remove_alias(Alias **aliases, char *name, int *aliases_len);
 
 void save_aliases(Alias **aliases, int aliases_len);
 

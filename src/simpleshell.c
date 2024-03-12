@@ -197,7 +197,7 @@ void reset_env(char *starting_dir, char *starting_HOME, char *starting_PATH)
     printf("Exiting...\n");
 }
 
-int parseCommand(char *command)
+int indexFromCommand(char *command)
 {
     int size = strlen(command);
     if (size>2)
