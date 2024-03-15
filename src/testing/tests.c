@@ -17,50 +17,51 @@ void testing_mode()
     else if (pid == 0)
     {
         struct Alias **aliases = create_alias_array();
-        int aliases_len = read_aliases(aliases);
-
+        int aliases_len = 0;
         char **history = create_history_array();
-        int history_len = read_history(history);
+        int history_len = 0;
         int history_index = 0;
-        if (history_len < HISTORY_SIZE)
-            history_index = history_len;
-        
-        //vertual memory joke
         
         chdir(getenv("HOME"));
 
         char *tests[] = {
-            // "ls\t-lF;.&..>.<..|/\tfksdk\n",
-            // "gethome\n",
-            // "sethome /mnt/c/Users\n",
-            // "gethome\n",
-            // "getpath\n",
-            // "setpath /bin\n",
-            // "getpath\n",
-            // "cd ..\n",
-            // "ls\n",
-            // "cd ~\n",
-            // "ls leetCode\n",
-            // "tokens these are all tokens\n",
-            // "history\n",
-            // "!!\n",
-            // "!1\n",
-            // "!-1\n",
-            // "Testing this\n",
+            "ls\t-lF;.&..>.<..|/\tfksdk\n", 
+            "gethome\n",
+            "sethome /mnt/c/Users\n",
+            "gethome\n",
+            "getpath\n",
+            "setpath /bin\n",
+            "getpath\n",
+            "cd ..\n",
+            "ls\n",
+            "cd ~\n",
+            "ls leetCode\n",
+            "tokens these are all tokens\n",
+            "history\n",
+            "!!\n",
+            "!1\n",
+            "!-1\n",
+            "Testing this\n",
             "alias\n",
             "alias a b\n",
             "alias\n",
-            // "unalias a\n",
-            // "alias list ls\n",
-            // "alias\n",
-            // "alias list dir\n",
-            // "alias\n",
-            // "list\n",
-            // "alias name\n",
-            // "unalias\n",
-            // "unalias fail this\n",
-            // "alias\n",
-            // "history\n"
+            "unalias a\n",
+            "alias list ls\n",
+            "alias\n",
+            "alias list dir\n",
+            "alias\n",
+            "list\n",
+            "alias name\n",
+            "unalias\n",
+            "unalias fail this\n",
+            "alias\n",
+            "history\n",
+            "history\n",
+            "history\n",
+            "history\n",
+            "history\n",
+            "history\n",
+            "history\n",
         };
         int test_no = sizeof(tests) / sizeof(tests[0]);
 
@@ -93,7 +94,6 @@ void testing_mode()
             }
             else
             {
-                printf("alias len : %d\n", aliases_len);
                 if (run(user_in, history, &history_len, &history_index, &aliases, &aliases_len))
                 {
                     printf("invalid input on test [%d] : '%s'", i, user_in);

@@ -15,6 +15,10 @@ Alias **create_alias_array()
     {
         perror("<Allocation Error>");
     }
+    while(*aliases){
+        *aliases = NULL;
+        ++aliases;
+    }
     return aliases;
 }
 
@@ -119,7 +123,6 @@ int add_alias(Alias **aliases, Alias *alias, int aliases_len)
 
     while (*(aliases + i))
         ++i;
-
     aliases[i] = alias;
     return 1;
 }

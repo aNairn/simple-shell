@@ -68,9 +68,7 @@ int main(void)
 int run(char *user_in, char **history, int *history_len, int *history_index, Alias ***aliases, int *aliases_len)
 {
     char **tokens;
-    printf("user in : %s\n", user_in);
     tokens = get_tokens(strdup(user_in));
-    print_tokens(tokens);
 
     // ====== CHECKING ALIASES ========
     int check_num = 0;
@@ -269,7 +267,10 @@ int run(char *user_in, char **history, int *history_len, int *history_index, Ali
     }
     else if (!strcmp(*tokens, "history"))
     {
-        print_history(history, *history_len, *history_index);
+        if(*(tokens+1))
+            to_many_args_err();
+        else
+            print_history(history, *history_len, *history_index);
     }
     else
     {
