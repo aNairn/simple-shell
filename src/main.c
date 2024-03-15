@@ -7,9 +7,7 @@
 
 void splash_screen()
 {
-    printf("-------------------------------------------------------------------------------------\n---                                888             888888            _.---._      ---\n--                                 888             888888        __.'"
-           ".'/|\\`."
-           "'.__   --\n--                                 888             888888       :__.' / | \\ `.__:  --\n-- .d8888b  .d88b.  8888b. .d8888b 88888b.  .d88b. 888888       '.'  /  |  \\  `.'  --\n-- 88K     d8P  Y8b    \"88b88K     888 \"88bd8P  Y8b888888        `. /   |   \\ .'   --\n-- \"Y8888b.88888888.d888888\"Y8888b.888  88888888888888888          `-.__|__.-'     --\n--      X88Y8b.    888  888     X88888  888Y8b.    888888                          --\n--- 88888P' \"Y8888 \"Y888888 88888P'888  888 \"Y8888 888888                         ---\n-------------------------------------------------------------------------------------\n\n");
+    printf("-------------------------------------------------------------------------------------\n---                                888             888888            _.---._      ---\n--                                 888             888888        __.'.'/|\\`.'.__   --\n--                                 888             888888       :__.' / | \\ `.__:  --\n-- .d8888b  .d88b.  8888b. .d8888b 88888b.  .d88b. 888888       '.'  /  |  \\  `.'  --\n-- 88K     d8P  Y8b    \"88b88K     888 \"88bd8P  Y8b888888        `. /   |   \\ .'   --\n-- \"Y8888b.88888888.d888888\"Y8888b.888  88888888888888888          `-.__|__.-'     --\n--      X88Y8b.    888  888     X88888  888Y8b.    888888                          --\n--- 88888P' \"Y8888 \"Y888888 88888P'888  888 \"Y8888 888888                         ---\n-------------------------------------------------------------------------------------\n\n");
 }
 
 int main(void)
@@ -70,14 +68,11 @@ int main(void)
 int run(char *user_in, char **history, int *history_len, int *history_index, Alias ***aliases, int *aliases_len)
 {
     char **tokens;
-
+    printf("user in : %s\n", user_in);
     tokens = get_tokens(strdup(user_in));
-    // need to somehow loop here in order to constantly update the tokens
-    // untill nothing to change
+    print_tokens(tokens);
 
     // ====== CHECKING ALIASES ========
-    // int check_done = 0;
-    // char **checked = malloc(5 * sizeof(char *));
     int check_num = 0;
     do
     {
@@ -85,14 +80,6 @@ int run(char *user_in, char **history, int *history_len, int *history_index, Ali
 
         if ((existing_alias = alias_exists(*aliases, *tokens, *aliases_len)))
         {
-            // for(int i = 0; i <= check_num; i++){
-            //     if(!strcmp(checked[i], existing_alias->name)){
-            //         printf("<Alias loop detected breaking>");
-            //         check_done = 1;
-            //         break;
-            //     }
-            // }
-            // checked[check_num] = existing_alias->name;
             tokens = get_alias_command(existing_alias, tokens);
         }
         if (!strcmp(*tokens, "alias"))
@@ -126,7 +113,7 @@ int run(char *user_in, char **history, int *history_len, int *history_index, Ali
                 Alias *alias = create_alias(name, command);
                 if (add_alias(*aliases, alias, *aliases_len))
                 {
-                    ++*aliases_len;
+                    ++(*aliases_len);
                 }
                 return 0;
             }
@@ -147,11 +134,8 @@ int run(char *user_in, char **history, int *history_len, int *history_index, Ali
             char *name = *tokens;
             if (alias_exists(*aliases, name, *aliases_len))
             {
-                printf("alias len : %d\n", *aliases_len);
-
                 *aliases = remove_alias(*aliases, name, aliases_len);
                 (*aliases_len)--;
-                printf("alias len : %d\n", *aliases_len);
             }
             else
             {
@@ -160,8 +144,6 @@ int run(char *user_in, char **history, int *history_len, int *history_index, Ali
             return 0;
         }
         ++check_num;
-
-        // } while (!check_done && check_num < 5);
     } while (check_num < 10);
 
     // ====== CHECKING HISTORY ========
@@ -219,10 +201,14 @@ int run(char *user_in, char **history, int *history_len, int *history_index, Ali
             }
             else
             {
-                if(!latest)
-                    tokens = get_tokens(strdup(history[(history_value + *history_len) % *history_len]));
-                else
+                if(latest){
+                    // working
                     tokens = get_tokens(strdup(history[(*history_index - history_value + *history_len) % *history_len]));
+                }
+                else{
+
+                    tokens = get_tokens(strdup(history[(*history_index - 1 +  history_value) % *history_len]));
+                }
             }
         }
     }
