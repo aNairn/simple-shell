@@ -4,6 +4,7 @@
 #include <stdlib.h>
 #include <sys/wait.h>
 #include <sys/stat.h>
+#include <ctype.h>
 
 #include "simpleshell.h"
 
@@ -86,4 +87,32 @@ int read_history(char **history){
     }
     fclose(file);
     return history_len;
+}
+
+// this function is used to parse a command into a number value between 1 and 20
+int parseHistoryPosition(char *command)
+{
+    if(!command || !*command) return -1;
+    
+    int history_value = -1;
+    
+    int first_digit = *command - '0';
+
+    if(!isdigit(first_digit)) return -1;
+    
+    if(*(command+1)){
+        int second_digit = *(command+1) - '0';
+
+        if(!isdigit(second_digit)) return -1;
+
+        history_value = first_digit * 10 + second_digit;
+
+        if(history_value < 1 || history_value > 20) return -1;
+    }
+    else
+    {
+        history_value = first_digit;
+        if(history_value < 1) return -1;
+    }
+    return history_value;
 }

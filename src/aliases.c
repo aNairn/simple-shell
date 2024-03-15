@@ -15,9 +15,10 @@ Alias **create_alias_array()
     {
         perror("<Allocation Error>");
     }
-    while(*aliases){
-        *aliases = NULL;
-        ++aliases;
+    int i = 0;
+    while(aliases[i]){
+        aliases[i] = NULL;
+        ++i;
     }
     return aliases;
 }
@@ -67,6 +68,11 @@ void save_aliases(Alias **aliases, int aliases_len)
             ++alias_command;
         }
         char *alias_value = malloc(len);
+        if (!alias_value)
+        {
+            perror("allocation error");
+            return;
+        }
 
         alias_command = aliases[i]->command_tokens;
         strcpy(alias_value, aliases[i]->name);
@@ -101,19 +107,19 @@ int read_aliases(Alias **aliases)
     while (fgets(line, sizeof(line), file) != NULL)
     {
         char *input_string = malloc(sizeof(char) * 150);
+        if(!input_string){
+            perror("allocation error");
+            return 0;
+        }
         strcpy(input_string, line);
-        char *terminator = input_string;
-        while(*terminator != ' ')
-            terminator++;
-        terminator = '\0';
-
-        char **input_tokens = get_tokens(input_string);
+        char *token_maker = input_string;
+        char **input_tokens = get_tokens(token_maker);
         char *name = *input_tokens;
         ++input_tokens;
-
         Alias *input_alias = create_alias(name, input_tokens);
         aliases_len += add_alias(aliases, input_alias, aliases_len);
     }
+    fclose(file);
     return aliases_len;
 }
 
@@ -128,10 +134,10 @@ int add_alias(Alias **aliases, Alias *alias, int aliases_len)
     }
 
     int i = 0;
-
     while (*(aliases + i))
         ++i;
     aliases[i] = alias;
+
     return 1;
 }
 
@@ -139,23 +145,28 @@ int add_alias(Alias **aliases, Alias *alias, int aliases_len)
 // to that alias
 char **fetch_alias(char **tokens, char **alias_command)
 {
-    char **new_tokens = malloc(sizeof(tokens) + sizeof(alias_command));
-    int i = 0;
-    while (alias_command[i])
+    int alias_command_len = 0;
+    while(alias_command[alias_command_len]) ++alias_command_len;
+    int tokens_len = 0;
+    while(tokens[tokens_len]) ++tokens_len;
+
+    char **new_tokens = malloc((tokens_len+alias_command_len+1) * sizeof(char *));
+    
+    if (!tokens)
     {
+        perror("allocation error");
+        return NULL;
+    }
+
+    for(int i = 0; i < alias_command_len; i++){
         new_tokens[i] = alias_command[i];
-        ++i;
     }
-    int k = 0;
-    if(tokens[k]){
-        while (tokens[i])
-        {
-            new_tokens[i] = tokens[k];
-            ++i;
-            ++k;
-        }
+    for(int i = 0; i < tokens_len; i++){
+        new_tokens[alias_command_len+i] = tokens[i];
     }
-    new_tokens[i] = NULL;
+
+    new_tokens[alias_command_len+tokens_len] = NULL;
+
     return new_tokens;
 }
 

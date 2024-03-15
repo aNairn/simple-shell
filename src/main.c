@@ -37,7 +37,6 @@ int main(void)
 
     //set program as running to be used for main loop escape
     int running = 1;
-
     do
     {
         //display the current directory
@@ -107,7 +106,6 @@ int run(char *user_in, char **history, int *history_len, int *history_index, Ali
             if (*(tokens + 1) == NULL)
             {
                 print_aliases(*aliases, *aliases_len);
-                free(tokens);
                 return 0;
             }
             else // check the perameters are valid and create the new alias
@@ -120,7 +118,6 @@ int run(char *user_in, char **history, int *history_len, int *history_index, Ali
                 if (*command == NULL)
                 {
                     to_few_args_err();
-                    free(tokens);
                     return 0;
                 }
 
@@ -136,12 +133,13 @@ int run(char *user_in, char **history, int *history_len, int *history_index, Ali
                 }
 
                 // if the name and command are valid create a new alias and add it to the alias array
+                // print_aliases(*aliases, *aliases_len);
                 Alias *alias = create_alias(name, command);
                 if (add_alias(*aliases, alias, *aliases_len))
                 {
                     ++(*aliases_len);
                 }
-                free(tokens);
+                
                 return 0;
             }
         }

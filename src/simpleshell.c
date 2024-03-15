@@ -43,6 +43,8 @@ char **get_tokens(char *input)
     if (!tokens)
     {
         perror("allocation error");
+        free(tokens);
+        return NULL;
     }
 
     token = strtok(input, TOKEN_DELIM);
@@ -58,6 +60,8 @@ char **get_tokens(char *input)
             if (!tokens)
             {
                 perror("<Allocation Error>");
+                free(tokens);
+                return NULL;
             }
         }
         token = strtok(NULL, TOKEN_DELIM);
@@ -209,52 +213,7 @@ void reset_env(char *starting_dir, char *starting_HOME, char *starting_PATH)
     printf("Exiting...\n");
 }
 
-// this function is used to parse a command into a number value between 1 and 20
-int parseHistoryPosition(char *command)
-{
-    int size = strlen(command);
-    // if there are more than two characters then the result will be invalid
-    if (size>2)
-    {
-        return -1;
-    }
-    // if there is no command then the result will be invalid
-    if (!*command)
-    {
-        return -1;
-    }
-    // if the character in command is not between the values '0' and '9' inclusive then the result
-    // will be invalid
-    if ((*command < '0' || *command > '9'))
-    {
-        return -1;
-    }
-    // if there is a second command characher then check both the same way
-    if (*(command + 1))
-    {
-        if (*command < '0' || *command > '9')
-        {
-            return -1;
-        }
-        if (*(command + 1) < '0' || *(command + 1) > '9')
-        {
-            return -1;
-        }
-    }
-    
-    // parse each character into a numerical value from a char value
-    int history_value = 0;
-    if (!*(command + 1))
-    {
-        history_value = (*command) - 48;
-    }
-    else
-    {
-        history_value = ((*command) - 48) * 10;
-        history_value += ((*(command + 1)) - 48);
-    }
-    return history_value;
-}
+
 
 // this function prints the tokens (used for testing)
 void print_tokens(char **tokens)
