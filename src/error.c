@@ -7,8 +7,6 @@
 
 #include "simpleshell.h" 
 
-#define INPUT_LIMIT 512
-
 // error handling
 void to_few_args_err()
 {

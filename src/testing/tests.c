@@ -8,6 +8,7 @@
 
 void testing_mode()
 {
+    // create a fork for the tests to run on
     pid_t pid = fork();
 
     if (pid < 0)
@@ -16,6 +17,7 @@ void testing_mode()
     }
     else if (pid == 0)
     {
+        // prepare the test enviroment
         struct Alias **aliases = create_alias_array();
         int aliases_len = 0;
         char **history = create_history_array();
@@ -24,6 +26,7 @@ void testing_mode()
         
         chdir(getenv("HOME"));
 
+        // this array hold all of the test commands
         char *tests[] = {
             "ls\t-lF;.&..>.<..|/\tfksdk\n", 
             "gethome\n",
@@ -69,6 +72,7 @@ void testing_mode()
         printf("===========STARTING TESTING===========\n");
         printf("======================================\n");
 
+        // loop the tests array and run each test
         for (int i = 0; i < test_no; i++)
         {
 
@@ -81,6 +85,7 @@ void testing_mode()
 
             display_prompt(cwd);
             printf("\n");
+            // get the current test and set it as the user input and ensure it is valid
             user_in = tests[i];
             int valid_input = input_is_valid(user_in);
             if (valid_input == -1)
@@ -94,6 +99,7 @@ void testing_mode()
             }
             else
             {
+                // run the test command
                 if (run(user_in, history, &history_len, &history_index, &aliases, &aliases_len))
                 {
                     printf("invalid input on test [%d] : '%s'", i, user_in);

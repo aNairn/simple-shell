@@ -8,33 +8,31 @@
 #include "simpleshell.h"
 
 
-// functions
-
+// this function gets the current working directory
 char *get_cwd()
 {
     char cwd[BUFFER_SIZE];
     char *cwd_p = cwd;
-
     getcwd(cwd, sizeof(cwd));
-
     return cwd_p;
 }
 
+// this function displays the user prompt
 void display_prompt(char *cwd)
 {
     printf("%s:$>", cwd);
 }
 
+// this method gets the users input
 char *get_users_input()
 {
     char buffer[BUFFER_SIZE];
     char *user_in;
-
     user_in = fgets(buffer, BUFFER_SIZE, stdin);
-
     return user_in;
 }
 
+// this function gets the tokens from the input string
 char **get_tokens(char *input)
 {
     int i = 0;
@@ -68,17 +66,20 @@ char **get_tokens(char *input)
     return tokens;
 }
 
+// this function changes the current directory to the new one entered
 void change_dir(char **tokens)
 {
+    // if there is no destination entered show an appropriate message
     if (*tokens == NULL)
     {
         to_few_args_err();
     }
+    // if there are to many parameters entered show an appropriate message
     else if (*(tokens + 1) != NULL)
     {
         to_many_args_err();
     }
-    else
+    else // if the destination is valid go to the stated destination
     {
         if (!strcmp(*tokens, "~") || !strcmp(*tokens, "HOME"))
         {
@@ -102,17 +103,20 @@ void change_dir(char **tokens)
     }
 }
 
+// this function changes the home directory to one chosen by the user
 void change_home(char **tokens)
 {
+    // of no destination is entered show an appropriate message
     if (*tokens == NULL)
     {
         to_few_args_err();
     }
+    // if to many parameters are entered then display an approriate message
     else if (*(tokens + 1) != NULL)
     {
         to_many_args_err();
     }
-    else
+    else // if the new home is valid then set the enviroment home to the chosen destination
     {
         struct stat dir_stat;
         if (stat(*tokens, &dir_stat) != 0 || !S_ISDIR(dir_stat.st_mode))
@@ -130,17 +134,20 @@ void change_home(char **tokens)
     }
 }
 
+// this function changes the system path
 void change_path(char **tokens)
 {
+    // if there is no destination entered then show an appropriate message
     if (*tokens == NULL)
     {
         to_few_args_err();
     }
+    // if there are to many parameters then show an appropriate message
     else if (*(tokens + 1) != NULL)
     {
         to_many_args_err();
     }
-    else
+    else // if the path entered is valid then try to set the enviroment path to the new path
     {
         struct stat dir_stat;
         if (stat(*tokens, &dir_stat) != 0 || !S_ISDIR(dir_stat.st_mode))
@@ -158,16 +165,20 @@ void change_path(char **tokens)
     }
 }
 
+// this function prints the enviroment home
 void print_home()
 {
     printf("%s\n", getenv("HOME"));
 }
 
+// this function prints the enviroment path
 void print_path()
 {
     printf("%s\n", getenv("PATH"));
 }
 
+// this function forks into a new process and checks that the entered command
+// is a system command located in the enviroment path
 void run_fork(char **tokens)
 {
     pid_t pid = fork();
@@ -188,6 +199,7 @@ void run_fork(char **tokens)
     }
 }
 
+// this function resets the system enviroment 
 void reset_env(char *starting_dir, char *starting_HOME, char *starting_PATH)
 {
     chdir(starting_dir);
@@ -197,21 +209,27 @@ void reset_env(char *starting_dir, char *starting_HOME, char *starting_PATH)
     printf("Exiting...\n");
 }
 
-int indexFromCommand(char *command)
+// this function is used to parse a command into a number value between 1 and 20
+int parseHistoryPosition(char *command)
 {
     int size = strlen(command);
+    // if there are more than two characters then the result will be invalid
     if (size>2)
     {
         return -1;
     }
+    // if there is no command then the result will be invalid
     if (!*command)
     {
         return -1;
     }
+    // if the character in command is not between the values '0' and '9' inclusive then the result
+    // will be invalid
     if ((*command < '0' || *command > '9'))
     {
         return -1;
     }
+    // if there is a second command characher then check both the same way
     if (*(command + 1))
     {
         if (*command < '0' || *command > '9')
@@ -223,7 +241,8 @@ int indexFromCommand(char *command)
             return -1;
         }
     }
-
+    
+    // parse each character into a numerical value from a char value
     int history_value = 0;
     if (!*(command + 1))
     {
@@ -234,10 +253,10 @@ int indexFromCommand(char *command)
         history_value = ((*command) - 48) * 10;
         history_value += ((*(command + 1)) - 48);
     }
-
     return history_value;
 }
 
+// this function prints the tokens (used for testing)
 void print_tokens(char **tokens)
 {
     while (*tokens != NULL)

@@ -7,6 +7,7 @@
 
 #include "simpleshell.h"
 
+// this function is used to create a new history array
 char **create_history_array()
 {
     char **history = malloc(20 * sizeof(char *));
@@ -17,6 +18,7 @@ char **create_history_array()
     return history;
 }
 
+// this function prints the history array
 void print_history(char **history, int history_len, int history_index)
 {
     int print_index = 0;
@@ -33,6 +35,7 @@ void print_history(char **history, int history_len, int history_index)
     } while (history_index != print_index);
 }
 
+// this function is used to save the history to the '.history' file
 void save_history(char **history, int history_len, int history_index)
 {
     FILE *file = fopen(HISTORY_FILENAME, "w");
@@ -46,6 +49,7 @@ void save_history(char **history, int history_len, int history_index)
     int i = 1;
     if (history_len == HISTORY_SIZE)
         save_index = history_index;
+    // this loop prints each line in history to a new line in the file
     do
     {
         fprintf(file, "%s", history[save_index]);
@@ -58,6 +62,7 @@ void save_history(char **history, int history_len, int history_index)
     fclose(file);
 }
 
+// this function is used to read the history in from the '.history' file
 int read_history(char **history){
 
     int history_len = 0;
@@ -69,7 +74,7 @@ int read_history(char **history){
     }
 
     char line[BUFFER_SIZE];
-
+    
     while(fgets(line, sizeof(line), file) != NULL){
         char *input_string = malloc(sizeof(char) * BUFFER_SIZE);
         strcpy(input_string, line);

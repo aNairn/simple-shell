@@ -7,7 +7,7 @@
 
 #include "simpleshell.h"
 
-
+// This function is used to create a new alias array
 Alias **create_alias_array()
 {
     Alias **aliases = malloc(MAX_ALIASES * sizeof(Alias *));
@@ -22,9 +22,9 @@ Alias **create_alias_array()
     return aliases;
 }
 
+// This function checks to see if an alias exists in the aliases array
 Alias *alias_exists(Alias **aliases, char *name, int aliases_len)
 {
-
     for(int i = 0; i < aliases_len; i++){
         Alias *alias = aliases[i];
         if (!strcmp(alias->name, name))
@@ -35,6 +35,7 @@ Alias *alias_exists(Alias **aliases, char *name, int aliases_len)
     return NULL;
 }
 
+// this function is used to create a new alias
 Alias *create_alias(char *name, char **tokens)
 {
     Alias *alias = malloc(sizeof(Alias));
@@ -44,8 +45,10 @@ Alias *create_alias(char *name, char **tokens)
     return alias;
 }
 
+// this finction is used to save the alias array to the '.aliases' file in the home directory
 void save_aliases(Alias **aliases, int aliases_len)
 {
+    // create a new file and open it
     FILE *file;
     file = fopen(ALIASES_FILENAME, "w");
     if (file == NULL)
@@ -55,6 +58,7 @@ void save_aliases(Alias **aliases, int aliases_len)
     }
     for (int i = 0; i < aliases_len; i++)
     {
+        // loop each alias and save it to a new line in the file
         int len = strlen(aliases[i]->name);
         char **alias_command = aliases[i]->command_tokens;
         while (*alias_command)
@@ -80,6 +84,7 @@ void save_aliases(Alias **aliases, int aliases_len)
     fclose(file);
 }
 
+// this function is used to read the any aliasess in from the '.aliases' file
 int read_aliases(Alias **aliases)
 {
     int aliases_len = 0;
@@ -91,7 +96,8 @@ int read_aliases(Alias **aliases)
         return 0;
     }
     char line[150];
-
+    
+    // this loop gets each line of the file and parses it into an alias
     while (fgets(line, sizeof(line), file) != NULL)
     {
         char *input_string = malloc(sizeof(char) * 150);
@@ -111,8 +117,10 @@ int read_aliases(Alias **aliases)
     return aliases_len;
 }
 
+// this function adds an alias to the aliases array
 int add_alias(Alias **aliases, Alias *alias, int aliases_len)
 {
+    // if the alias array is full show an appropriate message
     if (aliases_len >= MAX_ALIASES)
     {
         aliases_full_err();
@@ -127,6 +135,8 @@ int add_alias(Alias **aliases, Alias *alias, int aliases_len)
     return 1;
 }
 
+// this function get an alias from the alias array and returns the command belonging
+// to that alias
 char **fetch_alias(char **tokens, char **alias_command)
 {
     char **new_tokens = malloc(sizeof(tokens) + sizeof(alias_command));
@@ -149,6 +159,7 @@ char **fetch_alias(char **tokens, char **alias_command)
     return new_tokens;
 }
 
+// this function is called from the main to get the alias command
 char **get_alias_command(Alias *alias, char **tokens)
 {
     ++tokens;
@@ -173,6 +184,7 @@ void print_aliases(Alias **aliases, int aliases_len)
     
 }
 
+// this function is used to remove an alias from the aliases array
 Alias **remove_alias(Alias **aliases, char *name, int *aliases_len)
 {
     for(int i = 0; i < *aliases_len; i++)

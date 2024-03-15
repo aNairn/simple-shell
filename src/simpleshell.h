@@ -45,7 +45,7 @@ void print_tokens(char **tokens);
 
 void reset_env(char *starting_dir, char *starting_HOME, char *starting_PATH);
 
-int indexFromCommand(char *command);
+int parseHistoryPosition(char *command);
 
 // History.c
 
