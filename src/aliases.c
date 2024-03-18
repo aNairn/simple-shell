@@ -42,7 +42,6 @@ Alias *create_alias(char *name, char **tokens)
     Alias *alias = malloc(sizeof(Alias));
     alias->name = name;
     alias->command_tokens = tokens;
-
     return alias;
 }
 
@@ -203,6 +202,7 @@ Alias **remove_alias(Alias **aliases, char *name, int *aliases_len)
         Alias *alias = aliases[i];
         if (!strcmp(alias->name, name))
         {
+            free(alias);
             for(int j = i; j < *aliases_len; j++)
             {
                 if(aliases[j])
@@ -216,3 +216,11 @@ Alias **remove_alias(Alias **aliases, char *name, int *aliases_len)
     return aliases;
 }
 
+void free_aliases(Alias **aliases, int aliases_len)
+{
+    for(int i = 0; i < aliases_len; i++)
+    {
+        free(aliases[i]); 
+    }
+    free(aliases);
+}

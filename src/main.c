@@ -72,7 +72,7 @@ int main(void)
     save_history(history, history_len, history_index);
     save_aliases(aliases, aliases_len);
     // free uo the alias and history arrays
-    free(aliases);
+    free_aliases(aliases, aliases_len);
     free(history);
 
     return 0;

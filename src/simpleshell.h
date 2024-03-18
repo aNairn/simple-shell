@@ -83,6 +83,8 @@ void save_aliases(Alias **aliases, int aliases_len);
 
 int read_aliases(Alias **aliases);
 
+void free_aliases(Alias **aliases, int aliases_len);
+
 // ERRORS.c
 void to_few_args_err();
 
