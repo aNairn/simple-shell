@@ -71,7 +71,16 @@ void testing_mode()
             "alias 8 h\n",
             "alias 9 i\n",
             "alias 10 j\n",
+            "alias error wont work\n",
             "alias\n",
+            "get\n",
+            "to\n",
+            "twenty\n",
+            "history\n",
+            "!1\n",
+            "!-20\n",
+            "!-1\n",
+            "!20\n",
         };
         int test_no = sizeof(tests) / sizeof(tests[0]);
 
