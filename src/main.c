@@ -297,7 +297,8 @@ int run(char *user_in, char **history, int *history_len, int *history_index, Ali
     }
     else if (!strcmp(*tokens, "gethome"))
     {
-        print_home();
+        if(*(tokens+1)) to_many_args_err();
+        else print_home();
     }
     else if (!strcmp(*tokens, "setpath"))
     {
@@ -305,7 +306,8 @@ int run(char *user_in, char **history, int *history_len, int *history_index, Ali
     }
     else if (!strcmp(*tokens, "getpath"))
     {
-        print_path();
+        if(*(tokens+1)) to_many_args_err();
+        else print_path();
     }
     else if (!strcmp(*tokens, "history"))
     {

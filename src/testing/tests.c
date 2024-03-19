@@ -28,7 +28,8 @@ void testing_mode()
 
         // this array hold all of the test commands
         char *tests[] = {
-            "ls\t-lF;.&..>.<..|/\tfksdk\n", 
+            "ls\t-lF;.&..>.<..|/\tfksdk\n",
+            "ps aux\n", 
             "gethome\n",
             "sethome /mnt/c/Users\n",
             "gethome\n",

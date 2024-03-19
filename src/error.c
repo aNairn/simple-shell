@@ -52,7 +52,7 @@ void to_many_args_err()
 
 void not_valid_dir(char **tokens)
 {
-    printf("<Directory '%s' does not exists>\n", *tokens);
+    fprintf(stderr, "<Directory '%s' does not exists>\n", *tokens);
 }
 
 void cd_into_file_error(char ** tokens)
@@ -87,10 +87,10 @@ void no_alias_found_err()
 
 void alias_override_msg(char *name)
 {
-    printf("<Alias '%s' updated>\n", name);
+    fprintf(stderr, "<Alias '%s' updated>\n", name);
 }   
 
 void file_error(char *file_name)
 {
-    printf("<Error opening file '%s'>", file_name);
+    fprintf(stderr, "<Error opening file '%s'>", file_name);
 }
