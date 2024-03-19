@@ -96,14 +96,17 @@ int parseHistoryPosition(char *command)
     
     int history_value = -1;
     
-    int first_digit = *command - '0';
+    int first_digit = *command;
 
     if(!isdigit(first_digit)) return -1;
+    else first_digit -= '0';
     
     if(*(command+1)){
-        int second_digit = *(command+1) - '0';
+        int second_digit = *(command+1);
 
         if(!isdigit(second_digit)) return -1;
+        else second_digit -= '0';
+
 
         history_value = first_digit * 10 + second_digit;
 
