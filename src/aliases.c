@@ -13,7 +13,7 @@ Alias **create_alias_array()
     Alias **aliases = malloc(MAX_ALIASES * sizeof(Alias *));
     if (!aliases)
     {
-        perror("<Allocation Error>");
+        allocation_error();
     }
     int i = 0;
     while(aliases[i]){
@@ -202,7 +202,7 @@ Alias **remove_alias(Alias **aliases, char *name, int *aliases_len)
         Alias *alias = aliases[i];
         if (!strcmp(alias->name, name))
         {
-            free(alias);
+            // free(alias);
             for(int j = i; j < *aliases_len; j++)
             {
                 if(aliases[j])
@@ -210,10 +210,42 @@ Alias **remove_alias(Alias **aliases, char *name, int *aliases_len)
                     aliases[j] = aliases[j+1];
                 }
             }
+
+            aliases[*aliases_len] = NULL;
+            (*aliases_len)--;
             break;
         }
     }
     return aliases;
+}
+
+void update_alias(Alias **aliases, Alias *alias, char **command, int aliases_len){
+    for(int i = 0; i < aliases_len; i++){
+   
+        if(!strcmp(aliases[i]->name, alias->name)){
+            // Count the number of tokens in the new command
+            int num_tokens = 0;
+            while (command[num_tokens] != NULL) num_tokens++;
+
+            // Allocate memory for the new command tokens
+            aliases[i]->command_tokens = malloc((num_tokens + 1) * sizeof(char *));
+            if (aliases[i]->command_tokens == NULL)
+                allocation_error();
+            
+
+            // Copy each token
+            for (int j = 0; j < num_tokens; j++) {
+                aliases[i]->command_tokens[j] = strdup(command[j]);
+                if (aliases[i]->command_tokens[j] == NULL) {
+                    allocation_error();
+                }
+            }
+            aliases[i]->command_tokens[num_tokens] = NULL; // Null-terminate the array
+            break;
+        }
+    }
+
+    alias_override_msg(alias->name);
 }
 
 void free_aliases(Alias **aliases, int aliases_len)

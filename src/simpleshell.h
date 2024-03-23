@@ -43,9 +43,10 @@ void run_fork(char **tokens);
 
 void print_tokens(char **tokens);
 
+void free_tokens(char **tokens);
+
 void reset_env(char *starting_dir, char *starting_HOME, char *starting_PATH);
 
-int parseHistoryPosition(char *command);
 
 // History.c
 
@@ -57,6 +58,7 @@ void save_history(char **history, int history_len, int history_index);
 
 int read_history(char **history);
 
+int parseHistoryPosition(char *command);
 
 
 // void add_to_history(char **history, int *history_index, int *history_len, char *user_in);
@@ -82,6 +84,8 @@ Alias **remove_alias(Alias **aliases, char *name, int *aliases_len);
 void save_aliases(Alias **aliases, int aliases_len);
 
 int read_aliases(Alias **aliases);
+
+void update_alias(Alias **aliases, Alias *alias, char **command, int aliases_len);
 
 void free_aliases(Alias **aliases, int aliases_len);
 
@@ -111,6 +115,8 @@ void aliases_full_err();
 void no_alias_found_err();
 
 void file_error(char *file_name);
+
+void allocation_error();
 
 //MESSAGES  
 void alias_override_msg(char *name);

@@ -126,9 +126,8 @@ int run(char *user_in, char **history, int *history_len, int *history_index, Ali
                 Alias *existing_alias;
                 if ((existing_alias = alias_exists(*aliases, name, *aliases_len)))
                 {
-                    existing_alias->command_tokens = command;
-                    alias_override_msg(name);
-                    free(tokens);
+                    update_alias(*aliases, existing_alias, command, *aliases_len);
+                    free_tokens(tokens);
                     return 0;
                 }
 
@@ -164,7 +163,6 @@ int run(char *user_in, char **history, int *history_len, int *history_index, Ali
             if (alias_exists(*aliases, *tokens, *aliases_len))
             {
                 *aliases = remove_alias(*aliases, *tokens, aliases_len);
-                (*aliases_len)--;
             }
             else // If the alias to be removed doesnt exist show an appropriate message
             {
@@ -184,7 +182,7 @@ int run(char *user_in, char **history, int *history_len, int *history_index, Ali
         if (*history_len < 1)
         {
             empty_history_error();
-            free(tokens);
+            free_tokens(tokens);
             return 0;
         }
 
@@ -199,7 +197,7 @@ int run(char *user_in, char **history, int *history_len, int *history_index, Ali
             if (*command != '\0')
             {
                 to_many_args_err();
-                free(tokens);
+                free_tokens(tokens);
                 return 0;
             }
             else
@@ -225,14 +223,14 @@ int run(char *user_in, char **history, int *history_len, int *history_index, Ali
             if (history_value < 0)
             {
                 parsing_int_error();
-                free(tokens);
+                free_tokens(tokens);
                 return 0;
             }
             // if the value returned is out of the desired range through an out of bounds error
             else if (history_value < 1 || history_value > HISTORY_SIZE || history_value > *history_len)
             {
                 value_out_of_bounds_error();
-                free(tokens);
+                free_tokens(tokens);
                 return 0;
             }
             else // if the position parsed is valid then decide if it is latest or oldest command
@@ -253,7 +251,7 @@ int run(char *user_in, char **history, int *history_len, int *history_index, Ali
     else if (**tokens == '!' && *(tokens + 1))
     {
         to_many_args_err();
-        free(tokens);
+        free_tokens(tokens);
         return 0;
     }
     // if there is no history call then save the entered command into history.
@@ -269,7 +267,7 @@ int run(char *user_in, char **history, int *history_len, int *history_index, Ali
     // take the users input and call the appropriate command
     if (!strcmp(*tokens, "exit"))
     {
-        free(tokens);
+        free_tokens(tokens);
         return 1;
     }
     else if (!strcmp(*tokens, "test")) // <------ run the test suite.
@@ -321,6 +319,6 @@ int run(char *user_in, char **history, int *history_len, int *history_index, Ali
         run_fork(tokens);
     }
     // free the tokens and finish the run
-    free(tokens);
+    free_tokens(tokens);
     return 0;
 }

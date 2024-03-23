@@ -43,7 +43,7 @@ char **get_tokens(char *input)
     if (!tokens)
     {
         perror("allocation error");
-        free(tokens);
+        free_tokens(tokens);
         return NULL;
     }
 
@@ -60,7 +60,7 @@ char **get_tokens(char *input)
             if (!tokens)
             {
                 perror("<Allocation Error>");
-                free(tokens);
+                free_tokens(tokens);
                 return NULL;
             }
         }
@@ -223,4 +223,8 @@ void print_tokens(char **tokens)
         printf("\"%s\"\n", *tokens);
         tokens++;
     }
+}
+
+void free_tokens(char **tokens){
+    free(tokens);
 }

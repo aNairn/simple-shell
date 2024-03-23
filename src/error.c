@@ -94,3 +94,7 @@ void file_error(char *file_name)
 {
     fprintf(stderr, "<Error opening file '%s'>", file_name);
 }
+
+void allocation_error(){
+    perror("Error allocating memory");
+}

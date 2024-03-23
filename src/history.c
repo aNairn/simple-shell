@@ -14,7 +14,7 @@ char **create_history_array()
     char **history = malloc(20 * sizeof(char *));
     if (!history)
     {
-        perror("<Allocation Error>");
+        allocation_error();
     }
     return history;
 }
