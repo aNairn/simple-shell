@@ -7,41 +7,32 @@
 
 #include "simpleshell.h"
 
-#define BUFFER_SIZE 1024
-#define INPUT_LIMIT 512
-#define TOKEN_DELIM " \t\n|><&;"
-#define HISTORY_SIZE 20
-#define MAX_ALIASES 10
-#define ALIASES_FILENAME ".aliases"
-#define HISTORY_FILENAME ".history"
 
-// functions
-
+// this function gets the current working directory
 char *get_cwd()
 {
     char cwd[BUFFER_SIZE];
     char *cwd_p = cwd;
-
     getcwd(cwd, sizeof(cwd));
-
     return cwd_p;
 }
 
+// this function displays the user prompt
 void display_prompt(char *cwd)
 {
     printf("%s:$>", cwd);
 }
 
+// this method gets the users input
 char *get_users_input()
 {
     char buffer[BUFFER_SIZE];
     char *user_in;
-
     user_in = fgets(buffer, BUFFER_SIZE, stdin);
-
     return user_in;
 }
 
+// this function gets the tokens from the input string
 char **get_tokens(char *input)
 {
     int i = 0;
@@ -52,6 +43,8 @@ char **get_tokens(char *input)
     if (!tokens)
     {
         perror("allocation error");
+        free_tokens(tokens);
+        return NULL;
     }
 
     token = strtok(input, TOKEN_DELIM);
@@ -67,6 +60,8 @@ char **get_tokens(char *input)
             if (!tokens)
             {
                 perror("<Allocation Error>");
+                free_tokens(tokens);
+                return NULL;
             }
         }
         token = strtok(NULL, TOKEN_DELIM);
@@ -75,17 +70,20 @@ char **get_tokens(char *input)
     return tokens;
 }
 
+// this function changes the current directory to the new one entered
 void change_dir(char **tokens)
 {
+    // if there is no destination entered show an appropriate message
     if (*tokens == NULL)
     {
         to_few_args_err();
     }
+    // if there are to many parameters entered show an appropriate message
     else if (*(tokens + 1) != NULL)
     {
         to_many_args_err();
     }
-    else
+    else // if the destination is valid go to the stated destination
     {
         if (!strcmp(*tokens, "~") || !strcmp(*tokens, "HOME"))
         {
@@ -109,17 +107,20 @@ void change_dir(char **tokens)
     }
 }
 
+// this function changes the home directory to one chosen by the user
 void change_home(char **tokens)
 {
+    // of no destination is entered show an appropriate message
     if (*tokens == NULL)
     {
         to_few_args_err();
     }
+    // if to many parameters are entered then display an approriate message
     else if (*(tokens + 1) != NULL)
     {
         to_many_args_err();
     }
-    else
+    else // if the new home is valid then set the enviroment home to the chosen destination
     {
         struct stat dir_stat;
         if (stat(*tokens, &dir_stat) != 0 || !S_ISDIR(dir_stat.st_mode))
@@ -137,17 +138,20 @@ void change_home(char **tokens)
     }
 }
 
+// this function changes the system path
 void change_path(char **tokens)
 {
+    // if there is no destination entered then show an appropriate message
     if (*tokens == NULL)
     {
         to_few_args_err();
     }
+    // if there are to many parameters then show an appropriate message
     else if (*(tokens + 1) != NULL)
     {
         to_many_args_err();
     }
-    else
+    else // if the path entered is valid then try to set the enviroment path to the new path
     {
         struct stat dir_stat;
         if (stat(*tokens, &dir_stat) != 0 || !S_ISDIR(dir_stat.st_mode))
@@ -165,16 +169,20 @@ void change_path(char **tokens)
     }
 }
 
+// this function prints the enviroment home
 void print_home()
 {
     printf("%s\n", getenv("HOME"));
 }
 
+// this function prints the enviroment path
 void print_path()
 {
     printf("%s\n", getenv("PATH"));
 }
 
+// this function forks into a new process and checks that the entered command
+// is a system command located in the enviroment path
 void run_fork(char **tokens)
 {
     pid_t pid = fork();
@@ -195,6 +203,7 @@ void run_fork(char **tokens)
     }
 }
 
+// this function resets the system enviroment 
 void reset_env(char *starting_dir, char *starting_HOME, char *starting_PATH)
 {
     chdir(starting_dir);
@@ -204,122 +213,9 @@ void reset_env(char *starting_dir, char *starting_HOME, char *starting_PATH)
     printf("Exiting...\n");
 }
 
-int parseCommand(char *command)
-{
-    if (*(command + 2))
-    {
-        return -1;
-    }
-    if (!*command)
-    {
-        return -1;
-    }
-    if ((*command < '0' || *command > '9'))
-    {
-        return -1;
-    }
-    if (*(command + 1))
-    {
-        if (*command < '0' || *command > '9')
-        {
-            return -1;
-        }
-        if (*(command + 1) < '0' || *(command + 1) > '9')
-        {
-            return -1;
-        }
-    }
 
-    int history_value = 0;
-    if (!*(command + 1))
-    {
-        history_value = (*command) - 48;
-    }
-    else
-    {
-        history_value = ((*command) - 48) * 10;
-        history_value += ((*(command + 1)) - 48);
-    }
 
-    return history_value;
-}
-
-char **create_history_array()
-{
-    char **history = malloc(20 * sizeof(char *));
-    if (!history)
-    {
-        perror("<Allocation Error>");
-    }
-    return history;
-}
-
-void print_history(char **history, int history_len, int history_index)
-{
-    int print_index = 0;
-    int i = 1;
-    if (history_len == HISTORY_SIZE)
-        print_index = history_index;
-    do
-    {
-        printf("%d : %s", i, history[print_index]);
-        ++print_index;
-        if (print_index == HISTORY_SIZE)
-            print_index = 0;
-        ++i;
-    } while (history_index != print_index);
-}
-
-void save_history(char **history, int history_len, int history_index)
-{
-    FILE *file = fopen(HISTORY_FILENAME, "w");
-    if (file == NULL)
-    {
-        file_error(HISTORY_FILENAME);
-        return;
-    }
-
-    int save_index = 0;
-    int i = 1;
-    if (history_len == HISTORY_SIZE)
-        save_index = history_index;
-    do
-    {
-        fprintf(file, "%s", history[save_index]);
-        ++save_index;
-        if (save_index == HISTORY_SIZE)
-            save_index = 0;
-        ++i;
-    } while (history_index != save_index);
-
-    fclose(file);
-}
-
-int read_history(char **history){
-
-    int history_len = 0;
-    int history_index = 0;
-
-    FILE *file = fopen(HISTORY_FILENAME, "r");
-    if(file == NULL){
-        return 0;
-    }
-
-    char line[BUFFER_SIZE];
-
-    while(fgets(line, sizeof(line), file) != NULL){
-        char *input_string = malloc(sizeof(char) * BUFFER_SIZE);
-        strcpy(input_string, line);
-        //printf("%s\n", input_string);
-        history[history_len] = strdup(input_string);
-        history_len++;
-        history_index++;
-        if(history_index == HISTORY_SIZE) history_index = 0;
-    }
-    fclose(file);
-    return history_len;
-}
-
+// this function prints the tokens (used for testing)
 void print_tokens(char **tokens)
 {
     while (*tokens != NULL)
@@ -329,178 +225,6 @@ void print_tokens(char **tokens)
     }
 }
 
-Alias **create_alias_array()
-{
-    Alias **aliases = malloc(MAX_ALIASES * sizeof(Alias *));
-    if (!aliases)
-    {
-        perror("<Allocation Error>");
-    }
-    return aliases;
-}
-
-Alias *alias_exists(Alias **aliases, char *name, int aliases_len)
-{
-
-    for(int i = 0; i < aliases_len; i++){
-        Alias *alias = aliases[i];
-        if (!strcmp(alias->name, name))
-        {
-           return alias;
-        }
-    }
-    return NULL;
-}
-
-Alias *create_alias(char *name, char **tokens)
-{
-    Alias *alias = malloc(sizeof(Alias));
-    alias->name = name;
-    alias->command_tokens = tokens;
-
-    return alias;
-}
-
-void save_aliases(Alias **aliases, int aliases_len)
-{
-    FILE *file;
-    file = fopen(ALIASES_FILENAME, "w");
-    if (file == NULL)
-    {
-        file_error(ALIASES_FILENAME);
-        return;
-    }
-    for (int i = 0; i < aliases_len; i++)
-    {
-        int len = strlen(aliases[i]->name);
-        char **alias_command = aliases[i]->command_tokens;
-        while (*alias_command)
-        {
-            len += strlen(*alias_command) + 1;
-            ++alias_command;
-        }
-        char *alias_value = malloc(len);
-
-        alias_command = aliases[i]->command_tokens;
-        strcpy(alias_value, aliases[i]->name);
-        strcat(alias_value, " ");
-        while (*alias_command)
-        {
-            strcat(alias_value, *alias_command);
-            strcat(alias_value, " ");
-            ++alias_command;
-        }
-        strcat(alias_value, "\n");
-        fputs(alias_value, file);
-        free(alias_value);
-    }
-    fclose(file);
-}
-
-int read_aliases(Alias **aliases)
-{
-    int aliases_len = 0;
-
-    FILE *file = fopen(ALIASES_FILENAME, "r");
-    if (file == NULL)
-    {
-        file_error(ALIASES_FILENAME);
-        return 0;
-    }
-    char line[150];
-
-    while (fgets(line, sizeof(line), file) != NULL)
-    {
-        char *input_string = malloc(sizeof(char) * 150);
-        strcpy(input_string, line);
-        char **input_tokens = get_tokens(input_string);
-        char *name = *input_tokens;
-        ++input_tokens;
-
-        Alias *input_alias = create_alias(name, input_tokens);
-        aliases_len += add_alias(aliases, input_alias, aliases_len);
-    }
-    return aliases_len;
-}
-
-int add_alias(Alias **aliases, Alias *alias, int aliases_len)
-{
-    if (aliases_len >= MAX_ALIASES)
-    {
-        aliases_full_err();
-        return 0;
-    }
-
-    int i = 0;
-
-    while (*(aliases + i))
-        ++i;
-
-    aliases[i] = alias;
-    return 1;
-}
-
-char **fetch_alias(char **tokens, char **alias_command)
-{
-    char **new_tokens = malloc(sizeof(tokens) + sizeof(alias_command));
-    int i = 0;
-    while (alias_command[i])
-    {
-        new_tokens[i] = alias_command[i];
-        ++i;
-    }
-    int k = 0;
-    if(tokens[k]){
-        while (tokens[i])
-        {
-            new_tokens[i] = tokens[k];
-            ++i;
-            ++k;
-        }
-    }
-    new_tokens[i] = NULL;
-    return new_tokens;
-}
-
-char **get_alias_command(Alias *alias, char **tokens)
-{
-    ++tokens;
-    char **command = alias->command_tokens;
-    return fetch_alias(tokens, command);
-}
-
-void print_aliases(Alias **aliases, int aliases_len)
-{
-    for (int i = 0; i < aliases_len; i++)
-    {
-        Alias *alias = aliases[i];
-        printf("{ %s : \" ", alias->name);
-        char **tokens = alias->command_tokens;
-        while (*tokens != NULL)
-        {
-            printf("%s ", *tokens);
-            ++tokens;
-        }
-        printf("\" }\n");
-    }
-    
-}
-
-Alias **remove_alias(Alias **aliases, char *name)
-{
-    Alias **new_aliases_list = create_alias_array();
-    int i = 0;
-    while (*aliases)
-    {
-        Alias *alias = *aliases;
-        if (!strcmp(alias->name, name))
-        {
-            ++aliases;
-        }else{
-            new_aliases_list[i] = alias;
-            i++;
-            ++aliases;
-        }
-    }
-    return new_aliases_list;
+void free_tokens(char **tokens){
+    free(tokens);
 }

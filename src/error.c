@@ -7,8 +7,6 @@
 
 #include "simpleshell.h" 
 
-#define INPUT_LIMIT 512
-
 // error handling
 void to_few_args_err()
 {
@@ -26,6 +24,10 @@ int input_is_valid(char * input)
     {
         printf("\n");
         return -1;
+    }
+    else if(*input == '\n') 
+    {
+        return 0;
     }
     else if(strlen(input) > INPUT_LIMIT)
     {
@@ -50,7 +52,7 @@ void to_many_args_err()
 
 void not_valid_dir(char **tokens)
 {
-    printf("<Directory '%s' does not exists>\n", *tokens);
+    fprintf(stderr, "<Directory '%s' does not exists>\n", *tokens);
 }
 
 void cd_into_file_error(char ** tokens)
@@ -85,10 +87,14 @@ void no_alias_found_err()
 
 void alias_override_msg(char *name)
 {
-    printf("<Alias '%s' updated>\n", name);
+    fprintf(stderr, "<Alias '%s' updated>\n", name);
 }   
 
 void file_error(char *file_name)
 {
-    printf("<Error opening file '%s'>", file_name);
+    fprintf(stderr, "<Error opening file '%s'>", file_name);
+}
+
+void allocation_error(){
+    perror("Error allocating memory");
 }
