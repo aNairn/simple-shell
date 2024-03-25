@@ -219,28 +219,25 @@ Alias **remove_alias(Alias **aliases, char *name, int *aliases_len)
     return aliases;
 }
 
+// This function is used to update the comand tokens of an alias
 void update_alias(Alias **aliases, Alias *alias, char **command, int aliases_len){
     for(int i = 0; i < aliases_len; i++){
    
         if(!strcmp(aliases[i]->name, alias->name)){
-            // Count the number of tokens in the new command
             int num_tokens = 0;
             while (command[num_tokens] != NULL) num_tokens++;
 
-            // Allocate memory for the new command tokens
             aliases[i]->command_tokens = malloc((num_tokens + 1) * sizeof(char *));
             if (aliases[i]->command_tokens == NULL)
                 allocation_error();
             
-
-            // Copy each token
             for (int j = 0; j < num_tokens; j++) {
                 aliases[i]->command_tokens[j] = strdup(command[j]);
                 if (aliases[i]->command_tokens[j] == NULL) {
                     allocation_error();
                 }
             }
-            aliases[i]->command_tokens[num_tokens] = NULL; // Null-terminate the array
+            aliases[i]->command_tokens[num_tokens] = NULL; 
             break;
         }
     }
@@ -248,6 +245,7 @@ void update_alias(Alias **aliases, Alias *alias, char **command, int aliases_len
     alias_override_msg(alias->name);
 }
 
+// this function frees an alias
 void free_aliases(Alias **aliases, int aliases_len)
 {
     for(int i = 0; i < aliases_len; i++)
