@@ -10,12 +10,12 @@
 // error handling
 void to_few_args_err()
 {
-    perror("<Input does not have enough arguments>");
+    fprintf(stderr, "<Input does not have enough arguments> : command takes more arguments\n");
 }
 
 void input_too_long_error()
 {
-    perror("<Input exceeds limit>");
+    fprintf(stderr, "<Input exceeds limit> : reduce input\n");
 }
 
 int input_is_valid(char * input)
@@ -42,12 +42,12 @@ int input_is_valid(char * input)
 
 void fork_error()
 {
-    perror("<New process error>");
+    fprintf(stderr, "<New process error> : error starting new process\n");
 }
 
 void to_many_args_err()
 {
-    perror("<To Many Arguments>");
+    fprintf(stderr, "<To Many Arguments> : command takes less argumensts\n");
 }
 
 void not_valid_dir(char **tokens)
@@ -57,32 +57,32 @@ void not_valid_dir(char **tokens)
 
 void cd_into_file_error(char ** tokens)
 {
-    perror("<Can't cd into file>");
+    fprintf(stderr, "<Can't cd into file> : cd only works with directories\n");
 }
 
 void empty_history_error()
 {
-    perror("<History Empty>");
+    fprintf(stderr, "<History Empty> : nothing to invoke\n");
 }
 
 void parsing_int_error()
 {
-    perror("<Enter an Integer value>");
+    fprintf(stderr, "<Enter an Integer value> : only numbers can be entered for history commands\n");
 }
 
 void value_out_of_bounds_error()
 {
-    perror("<Value entered out of range>");
+    fprintf(stderr, "<Value entered out of range> : history commands can only be in the range 1 to 20\n");
 }
 
 void aliases_full_err()
 {
-    perror("<Aliases Full : Try removing unwanted aliases>");
+    fprintf(stderr, "<Aliases Full> : Try removing unwanted aliases\n");
 }
 
 void no_alias_found_err()
 {
-    perror("<No Alias Found>");
+    fprintf(stderr, "<No Alias Found> : try creating the alias first\n");
 }
 
 void alias_override_msg(char *name)
@@ -92,9 +92,9 @@ void alias_override_msg(char *name)
 
 void file_error(char *file_name)
 {
-    fprintf(stderr, "<Error opening file '%s'>", file_name);
+    fprintf(stderr, "<Error opening file '%s'>\n", file_name);
 }
 
 void allocation_error(){
-    perror("Error allocating memory");
+    fprintf(stderr, "<Error allocating memory> : fatal error allocating memory\n");
 }
