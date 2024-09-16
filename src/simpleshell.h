@@ -50,6 +50,8 @@ void reset_env(char *starting_dir, char *starting_HOME, char *starting_PATH);
 
 // History.c
 
+char **check_history(char ***history, int *history_len, int *history_index, char **tokens, char *user_in);
+
 char **create_history_array();
 
 void print_history(char ** history, int history_len, int history_index);
@@ -65,11 +67,15 @@ int parseHistoryPosition(char *command);
 
 // aliases.c
 
+void check_aliases(Alias ***aliases, char ***tokens, int *aliases_len);
+
 Alias **create_alias_array();
 
 Alias *alias_exists(Alias **aliases, char *name, int aliases_len);
 
 Alias *create_alias(char *name, char **tokens);
+
+void add_new_alias(Alias ***aliases, char **tokens, int *aliases_len);
 
 int add_alias(Alias **aliases, Alias *alias, int aliases_len);
 
@@ -78,6 +84,8 @@ char **fetch_alias(char **tokens, char **alias_command);
 char **get_alias_command(Alias *alias, char **tokens);
 
 void print_aliases(Alias **aliases, int aliases_len);
+
+void unalias(Alias ***aliases, char **tokens, int *aliases_len);
 
 Alias **remove_alias(Alias **aliases, char *name, int *aliases_len);
 

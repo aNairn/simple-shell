@@ -7,6 +7,23 @@
 
 #include "simpleshell.h"
 
+void check_aliases(Alias ***aliases, char ***tokens, int *aliases_len){
+    // Aliases will be checked a maximum of 10 times ensuring every alias can be checked at least onece
+    // any more than that and a loop is detected
+    int check_num = 0;
+    do
+    {
+        // check to see if the current input matches an existing alias an if it does set the tokens 
+        // to match the alias tokens
+        Alias *existing_alias;
+        if ((existing_alias = alias_exists(*aliases, **tokens, *aliases_len)))
+        {
+            *tokens = get_alias_command(existing_alias, *tokens);
+        }
+         ++check_num;
+    } while (check_num < 10);
+}
+
 // This function is used to create a new alias array
 Alias **create_alias_array()
 {
@@ -34,6 +51,36 @@ Alias *alias_exists(Alias **aliases, char *name, int aliases_len)
         }
     }
     return NULL;
+}
+
+void add_new_alias(Alias ***aliases, char **tokens, int *aliases_len){
+    // get the name of the alias and the command string
+    char *name = *(tokens + 1);
+    char **command = tokens + 2;
+
+    // Make sure command tokens are valid
+    if (*command == NULL)
+    {
+        to_few_args_err();
+        return;
+    }
+
+    // Check if the alias being entered exists and if it does override the existing
+    // con=mmand with the new command
+    Alias *existing_alias;
+    if ((existing_alias = alias_exists(*aliases, name, *aliases_len)))
+    {
+        update_alias(*aliases, existing_alias, command, *aliases_len);
+        return;
+    }
+
+    // if the name and command are valid create a new alias and add it to the alias array
+    // print_aliases(*aliases, *aliases_len);
+    Alias *alias = create_alias(name, command);
+    if (add_alias(*aliases, alias, *aliases_len))
+    {
+        ++(*aliases_len);
+    }
 }
 
 // this function is used to create a new alias
@@ -192,6 +239,31 @@ void print_aliases(Alias **aliases, int aliases_len)
         printf("\" }\n");
     }
     
+}
+
+void unalias(Alias ***aliases, char **tokens, int *aliases_len){
+    // if there are no parameters show an error
+    if (!*tokens)
+    {
+        to_few_args_err();
+        return;
+    }
+    // if there are more than one parameters entered then there are to many 
+    //  so show an appropriate error
+    else if (*(tokens + 1))
+    {
+        to_many_args_err();
+        return;
+    }
+    // if the alias to be remove exists then remove correctly
+    if (alias_exists(*aliases, *tokens, *aliases_len))
+    {
+        *aliases = remove_alias(*aliases, *tokens, aliases_len);
+    }
+    else // If the alias to be removed doesnt exist show an appropriate message
+    {
+        no_alias_found_err();
+    }
 }
 
 // this function is used to remove an alias from the aliases array
